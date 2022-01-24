@@ -8,3 +8,5 @@ export 'dropdown_picker.dart';
 export 'dropdown_picker_with_icon.dart';
 export 'avatar.dart';
 export 'loading.dart';
+export 'userChatBubble.dart';
+export 'messageStream.dart';

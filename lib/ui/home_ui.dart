@@ -9,6 +9,7 @@ class HomeUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetBuilder<AuthController>(
       init: AuthController(),
+      // ignore: unnecessary_null_comparison
       builder: (controller) => controller.firestoreUser.value!.uid == null
           ? Center(
               child: CircularProgressIndicator(),
@@ -20,7 +21,7 @@ class HomeUI extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.settings),
                       onPressed: () {
-                        Get.to(SettingsUI());
+                        Get.to(() => SettingsUI());
                       }),
                 ],
               ),
@@ -62,7 +63,9 @@ class HomeUI extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+              floatingActionButton: FloatingActionButton(onPressed: () {
+                Get.to(() => ChatScreen());
+              })),
     );
   }
 }

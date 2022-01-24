@@ -50,7 +50,7 @@ class AuthController extends GetxController {
       print('Send to signin');
       Get.offAll(SignInUI());
     } else {
-      Get.offAll(HomeUI());
+      Get.offAll(ChatScreen());
     }
   }
 

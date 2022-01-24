@@ -8,11 +8,11 @@ class AppRoutes {
     GetPage(name: '/', page: () => SplashUI()),
     GetPage(name: '/signin', page: () => SignInUI()),
     GetPage(name: '/signup', page: () => SignUpUI()),
-    GetPage(name: '/home', page: () => HomeUI()),
+    GetPage(name: '/home', page: () => ChatScreen()),
     GetPage(name: '/settings', page: () => SettingsUI()),
     GetPage(name: '/reset-password', page: () => ResetPasswordUI()),
     GetPage(name: '/update-profile', page: () => UpdateProfileUI()),
-    GetPage(name: '/chat_ui', page: ()=> ChatScreen()),
+    GetPage(name: '/user_info', page: ()=> HomeUI()),
     GetPage(name: '/summary_ui', page: ()=> ResultSummary())
   ];
 }

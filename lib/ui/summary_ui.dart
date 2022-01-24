@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_starter/ui/ui.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:math';
 import 'package:dio/dio.dart';
@@ -85,7 +88,6 @@ class _SegmentsPageState extends State<ResultSummary> {
 
   void dispose() {
     super.dispose();
-    this.fetchResult();
   }
 
   fetchResult() async {
@@ -121,19 +123,19 @@ class _SegmentsPageState extends State<ResultSummary> {
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, _chart[6].toDouble());
+            return makeGroupData(0, _chart[6].toDouble() ?? 0);
           case 1:
-            return makeGroupData(1, _chart[5].toDouble());
+            return makeGroupData(1, _chart[5].toDouble() ?? 0);
           case 2:
-            return makeGroupData(2, _chart[4].toDouble());
+            return makeGroupData(2, _chart[4].toDouble() ?? 0);
           case 3:
-            return makeGroupData(3, _chart[3].toDouble());
+            return makeGroupData(3, _chart[3].toDouble() ?? 0);
           case 4:
-            return makeGroupData(4, _chart[2].toDouble());
+            return makeGroupData(4, _chart[2].toDouble() ?? 0);
           case 5:
-            return makeGroupData(5, _chart[1].toDouble());
+            return makeGroupData(5, _chart[1].toDouble() ?? 0);
           case 6:
-            return makeGroupData(6, _chart[0].toDouble());
+            return makeGroupData(6, _chart[0].toDouble() ?? 0);
           default:
             return throw Error();
         }
@@ -155,7 +157,7 @@ class _SegmentsPageState extends State<ResultSummary> {
               color: Colors.black,
               icon: Icon(Icons.code_outlined),
               onPressed: () {
-                Navigator.pushNamed(context, '/test');
+                Get.to(() => SettingsUI());
               }),
         ],
       ),
@@ -201,7 +203,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                           child: AbsorbPointer(
                             child: Slider(
                                 label: _pointerValue.toString(),
-                                divisions: 5,
+                                divisions: 6,
                                 value: 63 - _pointerValue,
                                 min: 0,
                                 max: 63,

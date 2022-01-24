@@ -39,8 +39,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-
     super.dispose();
+    this.isListening = false;
     // Do some action when screen is closed
   }
 
@@ -126,7 +126,7 @@ class _ChatScreenState extends State<ChatScreen> {
                             leading: CircleAvatar(
                               radius: 33,
                               backgroundImage:
-                              AssetImage("assets/images/model.png"),
+                                  AssetImage("assets/images/model.png"),
                             ),
                             title: Text('MetaDoc',
                                 softWrap: true,
@@ -139,11 +139,11 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           isListening
                               ? LinearProgressIndicator(
-                            backgroundColor: Colors.pink[100],
-                          )
+                                  backgroundColor: Colors.pink[100],
+                                )
                               : LinearProgressIndicator(
-                            value: 0,
-                          ),
+                                  value: 0,
+                                ),
                           Padding(
                             padding: EdgeInsets.only(
                                 top: 10, bottom: 15, left: 10, right: 10),
@@ -173,36 +173,36 @@ class _ChatScreenState extends State<ChatScreen> {
                           ),
                           isText
                               ? Container(
-                            width: 330,
-                            height: 50,
-                            decoration: BoxDecoration(
-                                color: Colors.black26,
-                                borderRadius: BorderRadius.circular(20)),
-                            child: TextField(
-                              autofocus: true,
-                              decoration: InputDecoration(
-                                  fillColor: Colors.white30,
-                                  filled: true,
-                                  border: InputBorder.none),
-                              onSubmitted: (value) {
-                                setState(() => this.text = value.trim());
-                                setState(() => this.isText = false);
-                                // text = "";
-                                _messageTextController.clear();
-                                bubbleGenerate(value.trim(), 1, '-');
-                                maxScrolling();
-                                // straightCommand(value, isText);
-                                toggleKeyboard();
-                              },
-                            ),
-                          )
+                                  width: 330,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: Colors.black26,
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: TextField(
+                                    autofocus: true,
+                                    decoration: InputDecoration(
+                                        fillColor: Colors.white30,
+                                        filled: true,
+                                        border: InputBorder.none),
+                                    onSubmitted: (value) {
+                                      setState(() => this.text = value.trim());
+                                      setState(() => this.isText = false);
+                                      // text = "";
+                                      _messageTextController.clear();
+                                      bubbleGenerate(value.trim(), 1, '-');
+                                      maxScrolling();
+                                      // straightCommand(value, isText);
+                                      toggleKeyboard();
+                                    },
+                                  ),
+                                )
                               : IconButton(
-                            icon: const Icon(Icons.keyboard),
-                            tooltip: '키보드 입력 버튼',
-                            onPressed: () {
-                              setState(() => this.isText = true);
-                            },
-                          ),
+                                  icon: const Icon(Icons.keyboard),
+                                  tooltip: '키보드 입력 버튼',
+                                  onPressed: () {
+                                    setState(() => this.isText = true);
+                                  },
+                                ),
                         ],
                       ),
                     ),
@@ -221,12 +221,12 @@ class _ChatScreenState extends State<ChatScreen> {
   // function for user typing keyboard to send message
   // (It also includes : dio connection(http connection), create chat bubbles)
   Future toggleKeyboard() async {
-    // additionalCommand(distType, flow);
-    // straightCommand(text, isCommand);
+    additionalCommand(distType, flow);
+    straightCommand(text, isCommand);
     // if submittied with empty textField, block connection
     if (text != ''.trim()) {
       await dioConnection(bdi_call, email, text).then((value) => setState(
-              () => [message = value[0], distType = value[1], flow = value[2]]));
+          () => [message = value[0], distType = value[1], flow = value[2]]));
       maxScrolling();
     } else {
       setState(() => {isText = false});
@@ -235,25 +235,30 @@ class _ChatScreenState extends State<ChatScreen> {
 
   // voice recognition function (it also includes : dio connection(http request), create chat bubbles)
   Future toggleRecording() => SpeechApi.toggleRecording(
-    onResult: (text) => setState(() => this.text = text),
-    onListening: (isListening) {
-      setState(() => this.isListening = isListening);
-      if (!isListening) {
-        Future.delayed(Duration(seconds: 2), () async {
-          bubbleGenerate(text, 1, '');
-          maxScrolling();
+        onResult: (text) => setState(() => this.text = text),
+        onListening: (isListening) {
+          setState(() => this.isListening = isListening);
 
-          await dioConnection(bdi_call, email, text)
-              .then((value) => setState(() => message = value[0]));
-          maxScrolling();
+          if (text == ''){
+            setState(() async => {
+              message = "지금 듣고 있습니다.",
+              isListening = true
+            });
+          }
+          else if (!isListening) {
+            Future.delayed(Duration(seconds: 2), () async {
+              bubbleGenerate(text, 1, '');
+              maxScrolling();
 
-        });
-
-      } else {
-        message = "";
-      }
-    },
-  );
+              await dioConnection(bdi_call, email, text)
+                  .then((value) => setState(() => message = value[0]));
+              maxScrolling();
+            });
+          } else {
+            message = "";
+          } setState(() => isListening = false);
+        },
+      );
 }
 
 Future<List> dioConnection(String _end, String _email, String _userMsg) async {

@@ -34,7 +34,7 @@ class SignInUI extends StatelessWidget {
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                        authController.emailController.text = value!,
+                        authController.emailController.text = value,
                   ),
                   FormVerticalSpace(),
                   FormInputFieldWithIcon(
@@ -45,14 +45,14 @@ class SignInUI extends StatelessWidget {
                     obscureText: true,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                        authController.passwordController.text = value!,
+                        authController.passwordController.text = value,
                     maxLines: 1,
                   ),
                   FormVerticalSpace(),
                   PrimaryButton(
                       labelText: 'auth.signInButton'.tr,
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState.validate()) {
                           authController.signInWithEmailAndPassword(context);
                         }
                       }),

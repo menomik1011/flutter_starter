@@ -39,7 +39,7 @@ class ResetPasswordUI extends StatelessWidget {
                   PrimaryButton(
                       labelText: 'auth.resetPasswordButton'.tr,
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState.validate()) {
                           await authController.sendPasswordResetEmail(context);
                         }
                       }),

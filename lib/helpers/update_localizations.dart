@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:async';
 import 'dart:convert';
+import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:csv/csv.dart';
 
@@ -132,8 +133,8 @@ class LocalizationModel {
   final List<PhraseModel> phrases;
 
   LocalizationModel({
-    required this.language,
-    required this.phrases,
+    @required this.language,
+    @required this.phrases,
   });
 
   factory LocalizationModel.fromMap(Map data) {
@@ -154,7 +155,7 @@ class PhraseModel {
   String key;
   String phrase;
 
-  PhraseModel({required this.key, required this.phrase});
+  PhraseModel({@required this.key, @required this.phrase});
 
   factory PhraseModel.fromMap(Map data) {
     return PhraseModel(

@@ -226,7 +226,7 @@ class _ChatScreenState extends State<ChatScreen> {
     // if submittied with empty textField, block connection
     if (text != ''.trim()) {
       await dioConnection(bdi_call, email, text).then((value) => setState(
-              () => [message = value![0], distType = value[1], flow = value[2]]));
+              () => [message = value[0], distType = value[1], flow = value[2]]));
       maxScrolling();
     } else {
       setState(() => {isText = false});
@@ -244,7 +244,7 @@ class _ChatScreenState extends State<ChatScreen> {
           maxScrolling();
 
           await dioConnection(bdi_call, email, text)
-              .then((value) => setState(() => message = value![0]));
+              .then((value) => setState(() => message = value[0]));
           maxScrolling();
 
         });
@@ -256,7 +256,7 @@ class _ChatScreenState extends State<ChatScreen> {
   );
 }
 
-Future<List?> dioConnection(String _end, String _email, String _userMsg) async {
+Future<List> dioConnection(String _end, String _email, String _userMsg) async {
   var formData = FormData.fromMap({
     'input_text': _userMsg,
     'present_bdi': '',

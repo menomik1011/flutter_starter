@@ -20,7 +20,7 @@ final List<String> titles = [
 ];
 
 class ResultSummary extends StatefulWidget {
-  const ResultSummary({Key? key}) : super(key: key);
+  const ResultSummary({Key key}) : super(key: key);
 
   @override
   _SegmentsPageState createState() => _SegmentsPageState();
@@ -29,7 +29,7 @@ class ResultSummary extends StatefulWidget {
 class _SegmentsPageState extends State<ResultSummary> {
   int _currentIndex = 0;
   int touchedGroupIndex = -1;
-  final Color leftBarColor = Colors.blue[200]!;
+  final Color leftBarColor = Colors.blue[200];
   final double width = 11;
   var request = "${url}api/result/";
 
@@ -51,9 +51,9 @@ class _SegmentsPageState extends State<ResultSummary> {
   List _chart = [];
   List _date = [];
   bool isLoading = false;
-  late Map<String, dynamic> resultList;
-  late List<BarChartGroupData> showingBarGroups;
-  late List<BarChartGroupData> rawBarGroups;
+  Map<String, dynamic> resultList;
+  List<BarChartGroupData> showingBarGroups;
+  List<BarChartGroupData> rawBarGroups;
 
   @override
   void initState() {
@@ -124,9 +124,9 @@ class _SegmentsPageState extends State<ResultSummary> {
     switch (i) {
 
       case 0:
-        return makeGroupData(0, _chart[6]!.toDouble());
+        return makeGroupData(0, _chart[6].toDouble());
       case 1:
-        return makeGroupData(1, _chart[5]!.toDouble());
+        return makeGroupData(1, _chart[5].toDouble());
       case 2:
         return makeGroupData(2, _chart[4].toDouble());
       case 3:
@@ -230,7 +230,7 @@ class _SegmentsPageState extends State<ResultSummary> {
               width: 330.0,
               height: 200.0,
               child: Shimmer.fromColors(
-                  baseColor: Colors.grey[300]!,
+                  baseColor: Colors.grey[300],
                   highlightColor: Colors.white,
                   child: Card(
                     elevation: 6,
@@ -464,7 +464,7 @@ class _SegmentsPageState extends State<ResultSummary> {
 
                                               touchedGroupIndex = response
                                                   .spot
-                                                  !.touchedBarGroupIndex;
+                                                  .touchedBarGroupIndex;
 
                                               setState(() {
                                                 if (!event
@@ -689,8 +689,8 @@ class _SegmentsPageState extends State<ResultSummary> {
         BarChartRodData(
           y: y1,
           colors: [
-            Colors.red[200]!,
-            Colors.orange[200]!,
+            Colors.red[200],
+            Colors.orange[200],
             Colors.greenAccent,
             Colors.blueAccent
           ],

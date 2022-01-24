@@ -28,9 +28,9 @@ class Utils {
     }
   }
 
-  static String? _getTextAfterCommand({
-    required String text,
-    required String command,
+  static String _getTextAfterCommand({
+    @required String text,
+    @required String command,
   }) {
     final indexCommand = text.indexOf(command);
     final indexAfter = indexCommand + command.length;
@@ -43,7 +43,7 @@ class Utils {
   }
 
   static Future openLink({
-    required String url,
+    @required String url,
   }) async {
     if (url.trim().isEmpty) {
       // await _launchUrl('https://google.com');
@@ -53,7 +53,7 @@ class Utils {
   }
 
   static Future openEmail({
-    required String body,
+    @required String body,
   }) async {
     final url = 'mailto: ?body=${Uri.encodeFull(body)}';
     // await _launchUrl(url);

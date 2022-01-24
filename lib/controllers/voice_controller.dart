@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
+// import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:get/get.dart';
 import 'package:speech_to_text/speech_to_text.dart';
 
@@ -8,7 +8,7 @@ class VoiceController extends GetxController {
   var isListening = false.obs;
   var speechText = 'speech.comment'.tr.obs;
 
-  late SpeechToText speechToText;
+  SpeechToText speechToText;
   @override
   void onInit() {
     super.onInit();

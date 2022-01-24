@@ -31,7 +31,7 @@ class SignUpUI extends StatelessWidget {
                     validator: Validator().name,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                        authController.nameController.text = value!,
+                        authController.nameController.text = value,
                   ),
                   FormVerticalSpace(),
                   FormInputFieldWithIcon(
@@ -42,7 +42,7 @@ class SignUpUI extends StatelessWidget {
                     keyboardType: TextInputType.emailAddress,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                        authController.emailController.text = value!,
+                        authController.emailController.text = value,
                   ),
                   FormVerticalSpace(),
                   FormInputFieldWithIcon(
@@ -53,14 +53,14 @@ class SignUpUI extends StatelessWidget {
                     obscureText: true,
                     onChanged: (value) => null,
                     onSaved: (value) =>
-                        authController.passwordController.text = value!,
+                        authController.passwordController.text = value,
                     maxLines: 1,
                   ),
                   FormVerticalSpace(),
                   PrimaryButton(
                       labelText: 'auth.signUpButton'.tr,
                       onPressed: () async {
-                        if (_formKey.currentState!.validate()) {
+                        if (_formKey.currentState.validate()) {
                           SystemChannels.textInput.invokeMethod(
                               'TextInput.hide'); //to hide the keyboard - if any
                           authController.registerWithEmailAndPassword(context);

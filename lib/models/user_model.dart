@@ -1,4 +1,6 @@
 //User Model
+import 'package:flutter/cupertino.dart';
+
 class UserModel {
   final String uid;
   final String email;
@@ -6,10 +8,10 @@ class UserModel {
   final String photoUrl;
 
   UserModel(
-      {required this.uid,
-      required this.email,
-      required this.name,
-      required this.photoUrl});
+      {@required this.uid,
+      @required this.email,
+      @required this.name,
+      @required this.photoUrl});
 
   factory UserModel.fromMap(Map data) {
     return UserModel(

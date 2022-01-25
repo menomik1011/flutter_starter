@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_starter/ui/auth/auth.dart';
+import 'package:flutter_starter/ui/ui.dart';
 import 'package:get/get.dart';
 import 'package:flutter_starter/ui/components/segmented_selector.dart';
 import 'package:flutter_starter/controllers/controllers.dart';
@@ -16,6 +17,14 @@ class SettingsUI extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        actions: [
+          IconButton(
+              color: Colors.black,
+              icon: Icon(Icons.person),
+              onPressed: () {
+                Get.to(() => HomeUI());
+              }),
+        ],
         title: Text('settings.title'.tr),
       ),
       body: _buildLayoutSection(context),

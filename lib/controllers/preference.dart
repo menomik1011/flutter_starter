@@ -1,7 +1,11 @@
-const url = "http://192.168.35.179:5001/";
-String bdi_call = "bdiscale?email=";
-String email = "1111@test.net";
+import 'package:firebase_auth/firebase_auth.dart';
 
+// const url = "http://192.168.0.37:5001/";
+const url = "http://192.168.35.179:5001/";
+var currentUser = FirebaseAuth.instance.currentUser;
+String bdi_call = "bdiscale?email=";
+String email = currentUser.email;
+String name = currentUser.displayName;
 const bdiDist = {
   1: "슬픔",
   2: "비관주의",

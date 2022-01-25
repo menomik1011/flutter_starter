@@ -19,9 +19,9 @@ class HomeUI extends StatelessWidget {
                 title: Text('home.title'.tr),
                 actions: [
                   IconButton(
-                      icon: Icon(Icons.settings),
+                      icon: Icon(Icons.exit_to_app),
                       onPressed: () {
-                        Get.to(() => SettingsUI());
+                        Get.offAll(ChatScreen());
                       }),
                 ],
               ),

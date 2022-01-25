@@ -8,6 +8,7 @@ import 'package:dio/dio.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_starter/controllers/controllers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 final List<String> imagesList = [
   'https://i.insider.com/5eea8a48f0f419386721f9e8?width=1136&format=jpeg',
@@ -29,7 +30,9 @@ class ResultSummary extends StatefulWidget {
   _SegmentsPageState createState() => _SegmentsPageState();
 }
 
+
 class _SegmentsPageState extends State<ResultSummary> {
+
   int _currentIndex = 0;
   int touchedGroupIndex = -1;
   final Color leftBarColor = Colors.blue[200];
@@ -86,10 +89,6 @@ class _SegmentsPageState extends State<ResultSummary> {
     showingBarGroups = rawBarGroups;
   }
 
-  void dispose() {
-    super.dispose();
-  }
-
   fetchResult() async {
     Dio dio = Dio();
     Response response;
@@ -118,6 +117,10 @@ class _SegmentsPageState extends State<ResultSummary> {
 
       print(_chart);
     }
+  }
+
+  void dispose() {
+    super.dispose();
   }
 
   List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
@@ -155,7 +158,7 @@ class _SegmentsPageState extends State<ResultSummary> {
         actions: [
           IconButton(
               color: Colors.black,
-              icon: Icon(Icons.code_outlined),
+              icon: Icon(Icons.settings),
               onPressed: () {
                 Get.to(() => SettingsUI());
               }),
@@ -190,16 +193,18 @@ class _SegmentsPageState extends State<ResultSummary> {
                         ),
                         SizedBox(height: 15),
                         SliderTheme(
-                          data: SliderThemeData(
-                            trackHeight: 10,
-                            thumbColor: Colors.white,
-                            activeTickMarkColor: Colors.white,
-                            activeTrackColor: Color(0xFFE88C4F),
-                            inactiveTrackColor: Colors.grey,
-                            inactiveTickMarkColor: Colors.white,
-                            thumbShape:
-                                RoundSliderThumbShape(enabledThumbRadius: 10),
-                          ),
+                          data: _pointerValue > 10
+                              ? SliderThemeData(
+                                  trackHeight: 10,
+                                  thumbColor: Colors.white,
+                                  activeTickMarkColor: Colors.white,
+                                  activeTrackColor: Color(0xFFE88C4F),
+                                  inactiveTrackColor: Colors.grey,
+                                  inactiveTickMarkColor: Colors.white,
+                                  thumbShape: RoundSliderThumbShape(
+                                      enabledThumbRadius: 10),
+                                )
+                              : _pointerValue,
                           child: AbsorbPointer(
                             child: Slider(
                                 label: _pointerValue.toString(),
@@ -593,6 +598,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                                   ),
                                 ),
                               ),
+
                               SizedBox(
                                 height: 26,
                               ),
@@ -620,6 +626,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                 ),
               ),
             ),
+            SizedBox(height: 20),
             CarouselSlider(
               options: CarouselOptions(
                 autoPlay: true,
@@ -677,6 +684,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                   )
                   .toList(),
             ),
+            SizedBox(height: 20),
           ],
         ),
       ),

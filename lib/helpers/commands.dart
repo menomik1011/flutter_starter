@@ -19,8 +19,13 @@ Future additionalCommand(String _botOutput, int _flow) async {
     print(
         "in func $_botOutput == ${bdiDist[16]},,,${_botOutput == bdiDist[16]}");
     print("ss213$_flow");
-    return bubbleGenerate(
-        (additionalMessage[16][11]..shuffle()).first, 2, 'additionalCommand');
+    if (_flow == 1){
+      return bubbleGenerate(
+          (additionalMessage[16][12]..shuffle()).first, 2, 'additionalCommand');
+    } else if(_flow == 0){
+      return bubbleGenerate(
+          (additionalMessage[16][11]..shuffle()).first, 2, 'additionalCommand');
+    }
   }
 }
 

@@ -18,8 +18,9 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
+
 class _ChatScreenState extends State<ChatScreen> {
-  String email = "1111@test.net";
+  String email = currentUser.email;
   String text = '음성이나 텍스트를 입력해주세요';
   String message = '안녕하세요? \n대화형 문진에 오신걸 환영합니다.';
   String distType = '';
@@ -33,7 +34,6 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void initState() {
-    isCommand = false;
     super.initState();
   }
 
@@ -239,13 +239,9 @@ class _ChatScreenState extends State<ChatScreen> {
         onListening: (isListening) {
           setState(() => this.isListening = isListening);
 
-          if (text == ''){
-            setState(() async => {
-              message = "지금 듣고 있습니다.",
-              isListening = true
-            });
-          }
-          else if (!isListening) {
+          if (text == '') {
+            setState(() async => {message = "지금 듣고 있습니다.", isListening = true});
+          } else if (!isListening) {
             Future.delayed(Duration(seconds: 2), () async {
               bubbleGenerate(text, 1, '');
               maxScrolling();
@@ -256,7 +252,8 @@ class _ChatScreenState extends State<ChatScreen> {
             });
           } else {
             message = "";
-          } setState(() => isListening = false);
+          }
+          setState(() => isListening = false);
         },
       );
 }

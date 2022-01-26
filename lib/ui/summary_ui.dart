@@ -30,9 +30,7 @@ class ResultSummary extends StatefulWidget {
   _SegmentsPageState createState() => _SegmentsPageState();
 }
 
-
 class _SegmentsPageState extends State<ResultSummary> {
-
   int _currentIndex = 0;
   int touchedGroupIndex = -1;
   final Color leftBarColor = Colors.blue[200];
@@ -115,7 +113,7 @@ class _SegmentsPageState extends State<ResultSummary> {
         isLoading = false;
       });
 
-      print(_chart);
+      print(_date);
     }
   }
 
@@ -123,22 +121,22 @@ class _SegmentsPageState extends State<ResultSummary> {
     super.dispose();
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+  List<BarChartGroupData> showingGroups() => List.generate(_chart.length, (i) {
         switch (i) {
-          case 0:
-            return makeGroupData(0, _chart[6].toDouble() ?? 0);
-          case 1:
-            return makeGroupData(1, _chart[5].toDouble() ?? 0);
-          case 2:
-            return makeGroupData(2, _chart[4].toDouble() ?? 0);
-          case 3:
-            return makeGroupData(3, _chart[3].toDouble() ?? 0);
+          // case 0:
+          //   return makeGroupData(0, _chart[6].toDouble() ?? 0);
+          // case 1:
+          //   return makeGroupData(1, _chart[5].toDouble() ?? 0);
           case 4:
-            return makeGroupData(4, _chart[2].toDouble() ?? 0);
-          case 5:
-            return makeGroupData(5, _chart[1].toDouble() ?? 0);
-          case 6:
-            return makeGroupData(6, _chart[0].toDouble() ?? 0);
+            return makeGroupData(4, 63 - _chart[4].toDouble() ?? 0);
+          case 3:
+            return makeGroupData(3, 63 - _chart[3].toDouble() ?? 0);
+          case 2:
+            return makeGroupData(2, 63 - _chart[2].toDouble() ?? 0);
+          case 1:
+            return makeGroupData(1, 63 - _chart[1].toDouble() ?? 0);
+          case 0:
+            return makeGroupData(0, 63 - _chart[0].toDouble() ?? 0);
           default:
             return throw Error();
         }
@@ -359,7 +357,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                             child: Column(children: [
                               Text("내 통계 보기",
                                   style: TextStyle(
-                                      fontSize: 16,
+                                      fontSize: 18,
                                       fontWeight: FontWeight.w500)),
                               Icon(Icons.bar_chart, size: 25),
                             ]),
@@ -385,13 +383,6 @@ class _SegmentsPageState extends State<ResultSummary> {
 
                               // // place for chart1
                               // SizedBox(height: 200),
-                              Align(
-                                alignment: Alignment.centerLeft,
-                                child: Text("내 마음 건강지수",
-                                    style: TextStyle(
-                                        fontSize: 17,
-                                        fontWeight: FontWeight.w600)),
-                              ),
 
                               // place for chart2
                               AspectRatio(
@@ -410,7 +401,16 @@ class _SegmentsPageState extends State<ResultSummary> {
                                           MainAxisAlignment.start,
                                       mainAxisSize: MainAxisSize.max,
                                       children: <Widget>[
-                                        SizedBox(height: 30),
+                                        SizedBox(height: 12),
+
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text("내 마음 건강지수",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600)),
+                                        ),
+
                                         Row(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -527,60 +527,60 @@ class _SegmentsPageState extends State<ResultSummary> {
                                                               Color(0xff7589a2),
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          fontSize: 14),
+                                                          fontSize: 16),
                                                   margin: 20,
                                                   getTitles: (double value) {
                                                     switch (value.toInt()) {
-                                                      case 0:
-                                                        return _date[6] ?? "0";
-                                                      case 1:
-                                                        return _date[5] ?? "0";
-                                                      case 2:
+                                                      // case 0:
+                                                      //   return _date[0] ?? "0";
+                                                      // case 1:
+                                                      //   return _date[1] ?? "0";
+                                                      case 4:
                                                         return _date[4] ?? "0";
                                                       case 3:
                                                         return _date[3] ?? "0";
-                                                      case 4:
+                                                      case 2:
                                                         return _date[2] ?? "0";
-                                                      case 5:
+                                                      case 1:
                                                         return _date[1] ?? "0";
-                                                      case 6:
+                                                      case 0:
                                                         return _date[0] ?? "0";
                                                       default:
                                                         return '';
                                                     }
                                                   },
                                                 ),
-                                                // leftTitles: SideTitles(
-                                                //   showTitles: true,
-                                                //   getTextStyles: (context,
-                                                //           value) =>
-                                                //       const TextStyle(
-                                                //           color:
-                                                //               Color(0xff7589a2),
-                                                //           fontWeight:
-                                                //               FontWeight.bold,
-                                                //           fontSize: 14),
-                                                //   margin: 8,
-                                                //   reservedSize: 28,
-                                                //   interval: 1,
-                                                //   getTitles: (value) {
-                                                //     if (value == 0) {
-                                                //       return '건강';
-                                                //     } else if (value == 10) {
-                                                //       return '1';
-                                                //     } else if (value == 20) {
-                                                //       return '2';
-                                                //     } else if (value == 30) {
-                                                //       return '3';
-                                                //     } else if (value == 45) {
-                                                //       return '4';
-                                                //     } else if (value == 55) {
-                                                //       return '5';
-                                                //     } else {
-                                                //       return '';
-                                                //     }
-                                                //   },
-                                                // ),
+                                                leftTitles: SideTitles(
+                                                  showTitles: false,
+                                                  getTextStyles: (context,
+                                                          value) =>
+                                                      const TextStyle(
+                                                          color:
+                                                              Color(0xff7589a2),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 16),
+                                                  margin: 8,
+                                                  reservedSize: 28,
+                                                  interval: 1,
+                                                  getTitles: (value) {
+                                                    if (value == 0) {
+                                                      return '건강';
+                                                    } else if (value == 10) {
+                                                      return '1';
+                                                    } else if (value == 20) {
+                                                      return '2';
+                                                    } else if (value == 30) {
+                                                      return '3';
+                                                    } else if (value == 45) {
+                                                      return '4';
+                                                    } else if (value == 55) {
+                                                      return '5';
+                                                    } else {
+                                                      return '';
+                                                    }
+                                                  },
+                                                ),
                                               ),
                                               borderData: FlBorderData(
                                                 show: false,
@@ -613,7 +613,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                                   Text("내 통계 접기",
                                       style: TextStyle(
                                           color: Colors.blueGrey,
-                                          fontSize: 16,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w500)),
                                   Icon(Icons.bar_chart,
                                       size: 25, color: Colors.grey)

@@ -52,6 +52,8 @@ class _SegmentsPageState extends State<ResultSummary> {
   double _aft = 0;
   double _cgt = 0;
   double _smt = 0;
+  Map<String, dynamic> _scores;
+  Map<String, dynamic> _rank;
   List _chart = [];
   List _date = [];
   bool isLoading = false;
@@ -105,6 +107,8 @@ class _SegmentsPageState extends State<ResultSummary> {
         _cgt = resultList["cgt"].toDouble();
         _chart = resultList["value"];
         _date = resultList["value_date"];
+        _scores = resultList["scores"];
+        _rank = resultList["rank"];
         isLoading = false;
       });
 
@@ -113,7 +117,7 @@ class _SegmentsPageState extends State<ResultSummary> {
         isLoading = false;
       });
 
-      print(_date);
+      print(_rank);
     }
   }
 
@@ -270,6 +274,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                               fontSize: 17, fontWeight: FontWeight.w600)),
                     ),
                     SizedBox(height: 10),
+
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
@@ -282,6 +287,194 @@ class _SegmentsPageState extends State<ResultSummary> {
                       ),
                     ),
                     SizedBox(height: 24),
+
+                    AspectRatio(
+                      aspectRatio: 1,
+                      child: Card(
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(30)),
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.max,
+                            children: <Widget>[
+                              SizedBox(height: 12),
+                              Align(
+                                alignment: Alignment.center,
+                                child: Text("내 마음 건강지수",
+                                    style: TextStyle(
+                                        fontSize: 20,
+                                        fontWeight: FontWeight.w600)),
+                              ),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                              ),
+                              Expanded(
+                                child: BarChart(
+                                  BarChartData(
+                                    maxY: 63,
+                                    barTouchData: BarTouchData(
+                                        touchTooltipData: BarTouchTooltipData(
+                                          tooltipBgColor: Colors.grey[400],
+                                          tooltipPadding: const EdgeInsets.only(
+                                              left: 5,
+                                              right: 4,
+                                              top: 4,
+                                              bottom: 1),
+                                          tooltipMargin: 8,
+                                          getTooltipItem: (
+                                            BarChartGroupData group,
+                                            int groupIndex,
+                                            BarChartRodData rod,
+                                            int rodIndex,
+                                          ) =>
+                                              BarTooltipItem(
+                                            rod.y.round().toString(),
+                                            const TextStyle(
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                        touchCallback:
+                                            (FlTouchEvent event, response) {
+                                          if (response == null ||
+                                              response.spot == null) {
+                                            setState(() {
+                                              touchedGroupIndex = -1;
+                                              showingBarGroups =
+                                                  List.of(rawBarGroups);
+                                            });
+                                            return;
+                                          }
+
+                                          touchedGroupIndex = response
+                                              .spot.touchedBarGroupIndex;
+
+                                          setState(() {
+                                            if (!event
+                                                .isInterestedForInteractions) {
+                                              touchedGroupIndex = -1;
+                                              showingBarGroups =
+                                                  List.of(rawBarGroups);
+                                              return;
+                                            }
+                                            showingBarGroups =
+                                                List.of(rawBarGroups);
+                                            if (touchedGroupIndex != -1) {
+                                              var sum = 0.0;
+                                              for (var rod in showingBarGroups[
+                                                      touchedGroupIndex]
+                                                  .barRods) {
+                                                sum += rod.y;
+                                              }
+                                              final avg = sum /
+                                                  showingBarGroups[
+                                                          touchedGroupIndex]
+                                                      .barRods
+                                                      .length;
+
+                                              showingBarGroups[
+                                                      touchedGroupIndex] =
+                                                  showingBarGroups[
+                                                          touchedGroupIndex]
+                                                      .copyWith(
+                                                barRods: showingBarGroups[
+                                                        touchedGroupIndex]
+                                                    .barRods
+                                                    .map((rod) {
+                                                  return rod.copyWith(y: avg);
+                                                }).toList(),
+                                              );
+                                            }
+                                          });
+                                        }),
+                                    titlesData: FlTitlesData(
+                                      show: true,
+                                      rightTitles:
+                                          SideTitles(showTitles: false),
+                                      topTitles: SideTitles(showTitles: false),
+                                      bottomTitles: SideTitles(
+                                        showTitles: true,
+                                        getTextStyles: (context, value) =>
+                                            const TextStyle(
+                                                color: Color(0xff7589a2),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16),
+                                        margin: 20,
+                                        getTitles: (double value) {
+                                          switch (value.toInt()) {
+                                            // case 0:
+                                            //   return _date[0] ?? "0";
+                                            // case 1:
+                                            //   return _date[1] ?? "0";
+                                            case 4:
+                                              return _date[4] ?? "0";
+                                            case 3:
+                                              return _date[3] ?? "0";
+                                            case 2:
+                                              return _date[2] ?? "0";
+                                            case 1:
+                                              return _date[1] ?? "0";
+                                            case 0:
+                                              return _date[0] ?? "0";
+                                            default:
+                                              return '';
+                                          }
+                                        },
+                                      ),
+                                      leftTitles: SideTitles(
+                                        showTitles: false,
+                                        getTextStyles: (context, value) =>
+                                            const TextStyle(
+                                                color: Color(0xff7589a2),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 16),
+                                        margin: 8,
+                                        reservedSize: 28,
+                                        interval: 1,
+                                        // getTitles: (value) {
+                                        //   if (value == 0) {
+                                        //     return '건강';
+                                        //   } else if (value == 10) {
+                                        //     return '1';
+                                        //   } else if (value == 20) {
+                                        //     return '2';
+                                        //   } else if (value == 30) {
+                                        //     return '3';
+                                        //   } else if (value == 45) {
+                                        //     return '4';
+                                        //   } else if (value == 55) {
+                                        //     return '5';
+                                        //   } else {
+                                        //     return '';
+                                        //   }
+                                        // },
+                                      ),
+                                    ),
+                                    borderData: FlBorderData(
+                                      show: false,
+                                    ),
+                                    barGroups: showingGroups(),
+                                    gridData: FlGridData(show: false),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 12,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
                     Divider(),
                     SizedBox(height: 24),
                     // 감정영역 요소
@@ -373,18 +566,6 @@ class _SegmentsPageState extends State<ResultSummary> {
                                     )),
                               ),
                               SizedBox(height: 10),
-                              // Align(
-                              //   alignment: Alignment.centerLeft,
-                              //   child: Text("지금까지 수집된 통계",
-                              //       style: TextStyle(
-                              //           fontSize: 17,
-                              //           fontWeight: FontWeight.w600)),
-                              // ),
-
-                              // // place for chart1
-                              // SizedBox(height: 200),
-
-                              // place for chart2
                               AspectRatio(
                                 aspectRatio: 1,
                                 child: Card(
@@ -563,23 +744,23 @@ class _SegmentsPageState extends State<ResultSummary> {
                                                   margin: 8,
                                                   reservedSize: 28,
                                                   interval: 1,
-                                                  getTitles: (value) {
-                                                    if (value == 0) {
-                                                      return '건강';
-                                                    } else if (value == 10) {
-                                                      return '1';
-                                                    } else if (value == 20) {
-                                                      return '2';
-                                                    } else if (value == 30) {
-                                                      return '3';
-                                                    } else if (value == 45) {
-                                                      return '4';
-                                                    } else if (value == 55) {
-                                                      return '5';
-                                                    } else {
-                                                      return '';
-                                                    }
-                                                  },
+                                                  // getTitles: (value) {
+                                                  //   if (value == 0) {
+                                                  //     return '건강';
+                                                  //   } else if (value == 10) {
+                                                  //     return '1';
+                                                  //   } else if (value == 20) {
+                                                  //     return '2';
+                                                  //   } else if (value == 30) {
+                                                  //     return '3';
+                                                  //   } else if (value == 45) {
+                                                  //     return '4';
+                                                  //   } else if (value == 55) {
+                                                  //     return '5';
+                                                  //   } else {
+                                                  //     return '';
+                                                  //   }
+                                                  // },
                                                 ),
                                               ),
                                               borderData: FlBorderData(
@@ -598,7 +779,6 @@ class _SegmentsPageState extends State<ResultSummary> {
                                   ),
                                 ),
                               ),
-
                               SizedBox(
                                 height: 26,
                               ),

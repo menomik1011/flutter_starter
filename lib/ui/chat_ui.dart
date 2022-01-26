@@ -18,7 +18,6 @@ class ChatScreen extends StatefulWidget {
   _ChatScreenState createState() => _ChatScreenState();
 }
 
-
 class _ChatScreenState extends State<ChatScreen> {
   String email = currentUser.email;
   String text = '음성이나 텍스트를 입력해주세요';
@@ -87,10 +86,6 @@ class _ChatScreenState extends State<ChatScreen> {
               icon: Icon(Icons.analytics),
               onPressed: () {
                 Get.to(() => ResultSummary());
-                // await FlutterClipboard.copy(text);
-                // Scaffold.of(context).showSnackBar(
-                //   SnackBar(content: Text('✓   Copied to Clipboard')),
-                // );
               },
             ),
           ),
@@ -253,7 +248,6 @@ class _ChatScreenState extends State<ChatScreen> {
           } else {
             message = "";
           }
-          setState(() => isListening = false);
         },
       );
 }

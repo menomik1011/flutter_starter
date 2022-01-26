@@ -21,7 +21,7 @@ class HomeUI extends StatelessWidget {
                   IconButton(
                       icon: Icon(Icons.exit_to_app),
                       onPressed: () {
-                        Get.offAll(ChatScreen());
+                        Get.offAll(() => ChatScreen());
                       }),
                 ],
               ),

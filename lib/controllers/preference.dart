@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 
-const url = "http://277c-1-235-57-107.ngrok.io/";
+const url = "http://192.168.0.37:5001/";
 // const url = "http://192.168.35.179:5001/";
 var currentUser = FirebaseAuth.instance.currentUser;
 String bdi_call = "bdiscale?email=";

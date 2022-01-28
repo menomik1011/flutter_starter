@@ -72,69 +72,6 @@ class _SegmentsPageState extends State<ResultSummary> {
     super.initState();
     this.fetchResult();
     this._showCharts = false;
-
-    final barGroup1 = makeGroupData(0, 20);
-    final barGroup2 = makeGroupData(1, 18);
-    final barGroup3 = makeGroupData(2, 24);
-    final barGroup4 = makeGroupData(3, 35);
-    final barGroup5 = makeGroupData(4, 35);
-    final barGroup6 = makeGroupData(5, 35);
-    final barGroup7 = makeGroupData(6, 35);
-
-    final cogBarGroup1 = makeGroupData(0, 20);
-    final cogBarGroup2 = makeGroupData(1, 18);
-    final cogBarGroup3 = makeGroupData(2, 24);
-    final cogBarGroup4 = makeGroupData(3, 35);
-    final cogBarGroup5 = makeGroupData(4, 35);
-    final cogBarGroup6 = makeGroupData(5, 35);
-    final cogBarGroup7 = makeGroupData(6, 35);
-    final cogBarGroup8 = makeGroupData(7, 35);
-
-    final aftBarGroup1 = makeGroupData(0, 20);
-    final aftBarGroup2 = makeGroupData(1, 18);
-    final aftBarGroup3 = makeGroupData(2, 24);
-    final aftBarGroup4 = makeGroupData(3, 35);
-    final aftBarGroup5 = makeGroupData(4, 35);
-    final aftBarGroup6 = makeGroupData(5, 35);
-
-    final chartItem = [
-      barGroup1,
-      barGroup2,
-      barGroup3,
-      barGroup4,
-      barGroup5,
-      barGroup6,
-      barGroup7,
-    ];
-
-    final chartCogItem = [
-      cogBarGroup1,
-      cogBarGroup2,
-      cogBarGroup3,
-      cogBarGroup4,
-      cogBarGroup5,
-      cogBarGroup6,
-      cogBarGroup7,
-      cogBarGroup8,
-    ];
-
-    final chartAftItem = [
-      aftBarGroup1,
-      aftBarGroup2,
-      aftBarGroup3,
-      aftBarGroup4,
-      aftBarGroup5,
-      aftBarGroup6,
-    ];
-
-    rawBarGroups = chartItem;
-    showingBarGroups = rawBarGroups;
-
-    rawCogBarGroups = chartCogItem;
-    showingCogGroups = rawCogBarGroups;
-
-    rawAftBarGroups = chartAftItem;
-    showingAftGroups = rawAftBarGroups;
   }
 
   fetchResult() async {
@@ -196,21 +133,6 @@ class _SegmentsPageState extends State<ResultSummary> {
 
   List<BarChartGroupData> cogGroups() => List.generate(3, (i) {
         switch (i) {
-          // case 7:
-          //   return makeFactorGroupData(
-          //       7, _scores['cognitive'][6].toDouble() ?? 0);
-          // case 6:
-          //   return makeFactorGroupData(
-          //       6, _scores['cognitive'][6].toDouble() ?? 0);
-          // case 5:
-          //   return makeFactorGroupData(
-          //       5, _scores['cognitive'][5].toDouble() ?? 0);
-          // case 4:
-          //   return makeFactorGroupData(
-          //       4, _scores['cognitive'][4].toDouble() ?? 0);
-          // case 3:
-          //   return makeFactorGroupData(
-          //       3, _scores['cognitive'][3].toDouble() ?? 0);
           case 2:
             return makeFactorGroupData(
                 2, _scores['cognitive'][2].toDouble() ?? 0);
@@ -284,7 +206,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                             width: 1,
                           )),
                       child: Column(children: [
-                        SizedBox(height: 24),
+                        SizedBox(height: 30),
                         Padding(
                           padding: const EdgeInsets.only(right: 60.0),
                           child: Text(resultList["description"],
@@ -329,14 +251,10 @@ class _SegmentsPageState extends State<ResultSummary> {
                                 color: Colors.black,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w500)),
-                        SizedBox(height: 24)
+                        SizedBox(height: 30)
                       ]),
                     ),
                   )
-                // SpeedoMeter(
-                //     size: size,
-                //     pointerValue: _pointerValue,
-                //     resultList: resultList)
                 : SizedBox(
                     width: 330.0,
                     height: 200.0,
@@ -397,241 +315,239 @@ class _SegmentsPageState extends State<ResultSummary> {
                     ),
                     SizedBox(height: 24),
                     !isLoading
-                        ? AspectRatio(
-                            aspectRatio: 1,
-                            child: Card(
-                              elevation: 3,
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(30)),
-                              color: Colors.white,
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  mainAxisSize: MainAxisSize.max,
-                                  children: <Widget>[
-                                    SizedBox(height: 12),
-                                    Align(
-                                      alignment: Alignment.center,
-                                      child: Text("요소별 측정치",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.w600)),
-                                    ),
-                                    Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                    ),
-                                    Expanded(
-                                      child: BarChart(
-                                        BarChartData(
-                                          maxY: 4,
-                                          barTouchData: BarTouchData(
-                                              touchTooltipData:
-                                                  BarTouchTooltipData(
-                                                tooltipBgColor:
-                                                    Colors.grey[600],
-                                                tooltipPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 5,
-                                                        right: 4,
-                                                        top: 4,
-                                                        bottom: 1),
-                                                tooltipMargin: 8,
-                                                getTooltipItem: (
-                                                  BarChartGroupData group,
-                                                  int groupIndex,
-                                                  BarChartRodData rod,
-                                                  int rodIndex,
-                                                ) =>
-                                                    BarTooltipItem(
-                                                  rod.y.round().toString(),
-                                                  const TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
+                        ? Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: AspectRatio(
+                              aspectRatio: 1,
+                              child: Card(
+                                elevation: 4,
+                                shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(35)),
+                                color: Colors.white,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.stretch,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: <Widget>[
+                                      SizedBox(height: 12),
+                                      Align(
+                                        alignment: Alignment.center,
+                                        child: Text("요소별 측정치",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20,
+                                                fontWeight: FontWeight.w600)),
+                                      ),
+                                      Row(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                      ),
+                                      Expanded(
+                                        child: BarChart(
+                                          BarChartData(
+                                            maxY: 4,
+                                            barTouchData: BarTouchData(
+                                                touchTooltipData:
+                                                    BarTouchTooltipData(
+                                                  tooltipBgColor:
+                                                      Colors.grey[600],
+                                                  tooltipPadding:
+                                                      const EdgeInsets.only(
+                                                          left: 5,
+                                                          right: 4,
+                                                          top: 4,
+                                                          bottom: 1),
+                                                  tooltipMargin: 8,
+                                                  getTooltipItem: (
+                                                    BarChartGroupData group,
+                                                    int groupIndex,
+                                                    BarChartRodData rod,
+                                                    int rodIndex,
+                                                  ) =>
+                                                      BarTooltipItem(
+                                                    rod.y.round().toString(),
+                                                    const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                              touchCallback:
-                                                  (FlTouchEvent event,
-                                                      response) {
-                                                if (response == null ||
-                                                    response.spot == null) {
-                                                  setState(() {
-                                                    touchedGroupIndex = -1;
-                                                    showingCogGroups = List.of(
-                                                        rawCogBarGroups);
-                                                  });
-                                                  return;
-                                                }
-
-                                                touchedGroupIndex = response
-                                                    .spot.touchedBarGroupIndex;
-
-                                                setState(() {
-                                                  if (!event
-                                                      .isInterestedForInteractions) {
-                                                    touchedGroupIndex = -1;
-                                                    showingCogGroups = List.of(
-                                                        rawCogBarGroups);
+                                                touchCallback:
+                                                    (FlTouchEvent event,
+                                                        response) {
+                                                  if (response == null ||
+                                                      response.spot == null) {
+                                                    setState(() {
+                                                      touchedGroupIndex = -1;
+                                                      showingCogGroups =
+                                                          List.of(
+                                                              rawCogBarGroups);
+                                                    });
                                                     return;
                                                   }
-                                                  showingCogGroups =
-                                                      List.of(rawCogBarGroups);
-                                                  if (touchedGroupIndex != -1) {
-                                                    var sum = 0.0;
-                                                    for (var rod
-                                                        in showingCogGroups[
-                                                                touchedGroupIndex]
-                                                            .barRods) {
-                                                      sum += rod.y;
+
+                                                  touchedGroupIndex = response
+                                                      .spot
+                                                      .touchedBarGroupIndex;
+
+                                                  setState(() {
+                                                    if (!event
+                                                        .isInterestedForInteractions) {
+                                                      touchedGroupIndex = -1;
+                                                      showingCogGroups =
+                                                          List.of(
+                                                              rawCogBarGroups);
+                                                      return;
                                                     }
-                                                    final avg = sum /
-                                                        showingCogGroups[
+                                                    showingCogGroups = List.of(
+                                                        rawCogBarGroups);
+                                                    if (touchedGroupIndex !=
+                                                        -1) {
+                                                      var sum = 0.0;
+                                                      for (var rod
+                                                          in showingCogGroups[
+                                                                  touchedGroupIndex]
+                                                              .barRods) {
+                                                        sum += rod.y;
+                                                      }
+                                                      final avg = sum /
+                                                          showingCogGroups[
+                                                                  touchedGroupIndex]
+                                                              .barRods
+                                                              .length;
+
+                                                      showingCogGroups[
+                                                              touchedGroupIndex] =
+                                                          showingCogGroups[
+                                                                  touchedGroupIndex]
+                                                              .copyWith(
+                                                        barRods: showingCogGroups[
                                                                 touchedGroupIndex]
                                                             .barRods
-                                                            .length;
-
-                                                    showingCogGroups[
-                                                            touchedGroupIndex] =
-                                                        showingCogGroups[
-                                                                touchedGroupIndex]
-                                                            .copyWith(
-                                                      barRods: showingCogGroups[
-                                                              touchedGroupIndex]
-                                                          .barRods
-                                                          .map((rod) {
-                                                        return rod.copyWith(
-                                                            y: avg);
-                                                      }).toList(),
-                                                    );
+                                                            .map((rod) {
+                                                          return rod.copyWith(
+                                                              y: avg);
+                                                        }).toList(),
+                                                      );
+                                                    }
+                                                  });
+                                                }),
+                                            titlesData: FlTitlesData(
+                                              show: true,
+                                              rightTitles:
+                                                  SideTitles(showTitles: false),
+                                              topTitles:
+                                                  SideTitles(showTitles: false),
+                                              bottomTitles: SideTitles(
+                                                showTitles: true,
+                                                getTextStyles: (context,
+                                                        value) =>
+                                                    const TextStyle(
+                                                        color:
+                                                            Color(0xff7589a2),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                margin: 20,
+                                                getTitles: (double value) {
+                                                  switch (value.toInt()) {
+                                                    case 7:
+                                                      return _rank['cognitive']
+                                                              [7] ??
+                                                          0;
+                                                    case 6:
+                                                      return _rank['cognitive']
+                                                              [6] ??
+                                                          0;
+                                                    case 5:
+                                                      return _rank['cognitive']
+                                                              [5] ??
+                                                          0;
+                                                    case 4:
+                                                      return _rank['cognitive']
+                                                              [4] ??
+                                                          0;
+                                                    case 3:
+                                                      return _rank['cognitive']
+                                                              [3] ??
+                                                          0;
+                                                    case 2:
+                                                      return _rank['cognitive']
+                                                              [2] ??
+                                                          0;
+                                                    case 1:
+                                                      return _rank['cognitive']
+                                                              [1] ??
+                                                          0;
+                                                    case 0:
+                                                      return _rank['cognitive']
+                                                              [0] ??
+                                                          0;
+                                                    default:
+                                                      return '';
                                                   }
-                                                });
-                                              }),
-                                          titlesData: FlTitlesData(
-                                            show: true,
-                                            rightTitles:
-                                                SideTitles(showTitles: false),
-                                            topTitles:
-                                                SideTitles(showTitles: false),
-                                            bottomTitles: SideTitles(
-                                              showTitles: true,
-                                              getTextStyles: (context, value) =>
-                                                  const TextStyle(
-                                                      color: Color(0xff7589a2),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
-                                              margin: 20,
-                                              getTitles: (double value) {
-                                                switch (value.toInt()) {
-                                                  case 7:
-                                                    return _rank['cognitive']
-                                                            [7] ??
-                                                        "0";
-                                                  case 6:
-                                                    return _rank['cognitive']
-                                                            [6] ??
-                                                        "0";
-                                                  case 5:
-                                                    return _rank['cognitive']
-                                                            [5] ??
-                                                        "0";
-                                                  case 4:
-                                                    return _rank['cognitive']
-                                                            [4] ??
-                                                        "0";
-                                                  case 3:
-                                                    return _rank['cognitive']
-                                                            [3] ??
-                                                        "0";
-                                                  case 2:
-                                                    return _rank['cognitive']
-                                                            [2] ??
-                                                        "0";
-                                                  case 1:
-                                                    return _rank['cognitive']
-                                                            [1] ??
-                                                        "0";
-                                                  case 0:
-                                                    return _rank['cognitive']
-                                                            [0] ??
-                                                        "0";
-                                                  default:
-                                                    return '';
-                                                }
-                                              },
+                                                },
+                                              ),
+                                              leftTitles: SideTitles(
+                                                showTitles: false,
+                                                getTextStyles: (context,
+                                                        value) =>
+                                                    const TextStyle(
+                                                        color:
+                                                            Color(0xff7589a2),
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 16),
+                                                margin: 8,
+                                                reservedSize: 28,
+                                                interval: 1,
+                                              ),
                                             ),
-                                            leftTitles: SideTitles(
-                                              showTitles: false,
-                                              getTextStyles: (context, value) =>
-                                                  const TextStyle(
-                                                      color: Color(0xff7589a2),
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 16),
-                                              margin: 8,
-                                              reservedSize: 28,
-                                              interval: 1,
-                                              // getTitles: (value) {
-                                              //   if (value == 0) {
-                                              //     return '건강';
-                                              //   } else if (value == 10) {
-                                              //     return '1';
-                                              //   } else if (value == 20) {
-                                              //     return '2';
-                                              //   } else if (value == 30) {
-                                              //     return '3';
-                                              //   } else if (value == 45) {
-                                              //     return '4';
-                                              //   } else if (value == 55) {
-                                              //     return '5';
-                                              //   } else {
-                                              //     return '';
-                                              //   }
-                                              // },
+                                            borderData: FlBorderData(
+                                              show: false,
                                             ),
+                                            barGroups: cogGroups(),
+                                            gridData: FlGridData(show: false),
                                           ),
-                                          borderData: FlBorderData(
-                                            show: false,
-                                          ),
-                                          barGroups: cogGroups(),
-                                          gridData: FlGridData(show: false),
                                         ),
                                       ),
-                                    ),
-                                    const SizedBox(
-                                      height: 12,
-                                    ),
-                                  ],
+                                      const SizedBox(
+                                        height: 12,
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
                           )
-                        : SizedBox(
-                            width: 330.0,
-                            height: 350.0,
-                            child: Shimmer.fromColors(
-                                baseColor: Colors.grey[300],
-                                highlightColor: Colors.white,
-                                child: Card(
-                                  elevation: 6,
-                                  shadowColor: Colors.blueAccent,
-                                  shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15.0),
-                                      side: BorderSide(
-                                        color: Colors.grey.withOpacity(0.2),
-                                        width: 1,
-                                      )),
-                                )),
+                        : Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: SizedBox(
+                              width: 300.0,
+                              height: 350.0,
+                              child: Shimmer.fromColors(
+                                  baseColor: Colors.grey[300],
+                                  highlightColor: Colors.white,
+                                  child: Card(
+                                    elevation: 6,
+                                    shadowColor: Colors.blueAccent,
+                                    shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(15.0),
+                                        side: BorderSide(
+                                          color: Colors.grey.withOpacity(0.2),
+                                          width: 1,
+                                        )),
+                                  )),
+                            ),
                           ),
-                    SizedBox(height: 20),
                     Align(
                       alignment: Alignment.center,
                       child: Text("요소별 측정치는 수치가 높을수록 위험한 요소입니다",
@@ -641,22 +557,26 @@ class _SegmentsPageState extends State<ResultSummary> {
                               fontWeight: FontWeight.w600)),
                     ),
                     Row(children: <Widget>[
-                      SizedBox(
-                          height: 130,
-                          width: size / 2,
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: Text(_rank['cognitive'][0],
-                                  style: TextStyle(
-                                      fontSize: 25, color: Colors.black)))),
-                      SizedBox(
-                          height: 130,
-                          width: size / 2,
-                          child: Align(
-                              alignment: Alignment.center,
-                              child: Text(_rank['cognitive'][1],
-                                  style: TextStyle(
-                                      fontSize: 25, color: Colors.black)))),
+                      !isLoading
+                          ? SizedBox(
+                              height: 130,
+                              width: size / 2,
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(_rank['cognitive'][0],
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.black))))
+                          : Text(""),
+                      !isLoading
+                          ? SizedBox(
+                              height: 130,
+                              width: size / 2,
+                              child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(_rank['cognitive'][1],
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.black))))
+                          : Text(""),
                     ]),
                     SizedBox(height: 24),
                     Divider(color: Colors.black38),
@@ -1088,10 +1008,10 @@ class _SegmentsPageState extends State<ResultSummary> {
         BarChartRodData(
           y: y1,
           colors: [
-            Colors.orange[100],
+            Colors.white70,
+            Colors.orange[400],
             Colors.orangeAccent,
             Colors.orangeAccent,
-            Colors.white
           ],
           width: width,
         )

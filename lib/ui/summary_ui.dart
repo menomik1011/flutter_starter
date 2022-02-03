@@ -37,15 +37,6 @@ class _SegmentsPageState extends State<ResultSummary> {
   final double width = 11;
   var request = "${url}api/result/";
 
-  final sliderLabels = [
-    "위험해요",
-    "위험해요",
-    "너무 아파요",
-    "아파요",
-    "치료가 필요해요",
-    "건강한 편이예요",
-    "너무 건강해요"
-  ];
   bool _showCharts = false;
   double _pointerValue = 0;
   int total = 63;
@@ -58,6 +49,7 @@ class _SegmentsPageState extends State<ResultSummary> {
   List _date = [];
   bool isLoading = false;
   Map<String, dynamic> resultList;
+
   List<BarChartGroupData> showingBarGroups;
   List<BarChartGroupData> rawBarGroups;
 
@@ -148,7 +140,7 @@ class _SegmentsPageState extends State<ResultSummary> {
       });
 
   List<BarChartGroupData> aftGroups() =>
-      List.generate(_scores['cognitive'].length, (i) {
+      List.generate(_scores['affect'].length, (i) {
         switch (i) {
           case 5:
             return makeFactorGroupData(5, _scores['affect'][5].toDouble() ?? 0);
@@ -218,20 +210,41 @@ class _SegmentsPageState extends State<ResultSummary> {
                         ),
                         SizedBox(height: 15),
                         SliderTheme(
-                          data: _pointerValue > 10
+                          data: !isLoading
                               ? SliderThemeData(
                                   trackHeight: 10,
-                                  thumbColor: Colors.white,
+                                  thumbColor: _pointerValue > 28
+                                      ? Colors.orange[200]
+                                      : Colors.grey[100],
                                   activeTickMarkColor: Colors.white,
-                                  activeTrackColor: _pointerValue < 10
-                                      ? Colors.blueAccent
-                                      : Colors.redAccent,
+                                  showValueIndicator: ShowValueIndicator.always,
+                                  activeTrackColor: _pointerValue > 10 &&
+                                          _pointerValue < 18
+                                      ? Colors.greenAccent
+                                      : _pointerValue > 18 && _pointerValue < 28
+                                          ? Colors.orangeAccent
+                                          : _pointerValue > 28 &&
+                                                  _pointerValue < 38
+                                              ? Colors.redAccent
+                                              : _pointerValue > 38 &&
+                                                      _pointerValue < 63
+                                                  ? Colors.red[600]
+                                                  : Colors.blueAccent,
                                   inactiveTrackColor: Colors.grey,
                                   inactiveTickMarkColor: Colors.white,
                                   thumbShape: RoundSliderThumbShape(
                                       enabledThumbRadius: 10),
                                 )
-                              : _pointerValue,
+                              : SliderThemeData(
+                                  trackHeight: 10,
+                                  thumbColor: Colors.white,
+                                  activeTickMarkColor: Colors.white,
+                                  activeTrackColor: Colors.grey,
+                                  inactiveTrackColor: Colors.grey,
+                                  inactiveTickMarkColor: Colors.white,
+                                  thumbShape: RoundSliderThumbShape(
+                                      enabledThumbRadius: 10),
+                                ),
                           child: AbsorbPointer(
                             child: Slider(
                                 label: _pointerValue.toString(),
@@ -300,19 +313,36 @@ class _SegmentsPageState extends State<ResultSummary> {
                               fontWeight: FontWeight.w600)),
                     ),
                     SizedBox(height: 10),
-
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Brian님과 대화 중에 수집한 정보에 의하면 \n자기비판, 죄책감과 같은 우울증의 원인 요소들을 \n많이 느끼고 계신거 같아 보여요.\n주변 환경, 과거의 일이 관련이 있는 경우가 많아요",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        softWrap: true,
-                      ),
-                    ),
+                    !isLoading
+                        ? Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "Brian님과 대화 중에 수집한 정보에 의하면 \n${_rank['cognitive'][0]}, ${_rank['cognitive'][1]}과 같은 우울증의 원인 요소들을 \n많이 느끼고 계신거 같아 보여요.\n주변 환경, 과거의 일이 관련이 있는 경우가 많아요",
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              softWrap: true,
+                            ),
+                          )
+                        : SizedBox(
+                            width: size,
+                            height: 30.0,
+                            child: Shimmer.fromColors(
+                                baseColor: Colors.grey[300],
+                                highlightColor: Colors.white,
+                                child: Card(
+                                  elevation: 6,
+                                  shadowColor: Colors.blueAccent,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15.0),
+                                      side: BorderSide(
+                                        color: Colors.grey.withOpacity(0.2),
+                                        width: 1,
+                                      )),
+                                )),
+                          ),
                     SizedBox(height: 24),
                     !isLoading
                         ? Padding(
@@ -353,92 +383,32 @@ class _SegmentsPageState extends State<ResultSummary> {
                                           BarChartData(
                                             maxY: 4,
                                             barTouchData: BarTouchData(
-                                                touchTooltipData:
-                                                    BarTouchTooltipData(
-                                                  tooltipBgColor:
-                                                      Colors.grey[600],
-                                                  tooltipPadding:
-                                                      const EdgeInsets.only(
-                                                          left: 5,
-                                                          right: 4,
-                                                          top: 4,
-                                                          bottom: 1),
-                                                  tooltipMargin: 8,
-                                                  getTooltipItem: (
-                                                    BarChartGroupData group,
-                                                    int groupIndex,
-                                                    BarChartRodData rod,
-                                                    int rodIndex,
-                                                  ) =>
-                                                      BarTooltipItem(
-                                                    rod.y.round().toString(),
-                                                    const TextStyle(
-                                                      color: Colors.white,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                    ),
+                                              touchTooltipData:
+                                                  BarTouchTooltipData(
+                                                tooltipBgColor:
+                                                    Colors.grey[600],
+                                                tooltipPadding:
+                                                    const EdgeInsets.only(
+                                                        left: 5,
+                                                        right: 4,
+                                                        top: 4,
+                                                        bottom: 1),
+                                                tooltipMargin: 8,
+                                                getTooltipItem: (
+                                                  BarChartGroupData group,
+                                                  int groupIndex,
+                                                  BarChartRodData rod,
+                                                  int rodIndex,
+                                                ) =>
+                                                    BarTooltipItem(
+                                                  rod.y.toStringAsFixed(1),
+                                                  const TextStyle(
+                                                    color: Colors.white,
+                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 ),
-                                                touchCallback:
-                                                    (FlTouchEvent event,
-                                                        response) {
-                                                  if (response == null ||
-                                                      response.spot == null) {
-                                                    setState(() {
-                                                      touchedGroupIndex = -1;
-                                                      showingCogGroups =
-                                                          List.of(
-                                                              rawCogBarGroups);
-                                                    });
-                                                    return;
-                                                  }
-
-                                                  touchedGroupIndex = response
-                                                      .spot
-                                                      .touchedBarGroupIndex;
-
-                                                  setState(() {
-                                                    if (!event
-                                                        .isInterestedForInteractions) {
-                                                      touchedGroupIndex = -1;
-                                                      showingCogGroups =
-                                                          List.of(
-                                                              rawCogBarGroups);
-                                                      return;
-                                                    }
-                                                    showingCogGroups = List.of(
-                                                        rawCogBarGroups);
-                                                    if (touchedGroupIndex !=
-                                                        -1) {
-                                                      var sum = 0.0;
-                                                      for (var rod
-                                                          in showingCogGroups[
-                                                                  touchedGroupIndex]
-                                                              .barRods) {
-                                                        sum += rod.y;
-                                                      }
-                                                      final avg = sum /
-                                                          showingCogGroups[
-                                                                  touchedGroupIndex]
-                                                              .barRods
-                                                              .length;
-
-                                                      showingCogGroups[
-                                                              touchedGroupIndex] =
-                                                          showingCogGroups[
-                                                                  touchedGroupIndex]
-                                                              .copyWith(
-                                                        barRods: showingCogGroups[
-                                                                touchedGroupIndex]
-                                                            .barRods
-                                                            .map((rod) {
-                                                          return rod.copyWith(
-                                                              y: avg);
-                                                        }).toList(),
-                                                      );
-                                                    }
-                                                  });
-                                                }),
+                                              ),
+                                            ),
                                             titlesData: FlTitlesData(
                                               show: true,
                                               rightTitles:
@@ -461,23 +431,23 @@ class _SegmentsPageState extends State<ResultSummary> {
                                                     case 7:
                                                       return _rank['cognitive']
                                                               [7] ??
-                                                          0;
+                                                          0.0;
                                                     case 6:
                                                       return _rank['cognitive']
                                                               [6] ??
-                                                          0;
+                                                          0.0;
                                                     case 5:
                                                       return _rank['cognitive']
                                                               [5] ??
-                                                          0;
+                                                          0.0;
                                                     case 4:
                                                       return _rank['cognitive']
                                                               [4] ??
-                                                          0;
+                                                          0.0;
                                                     case 3:
                                                       return _rank['cognitive']
                                                               [3] ??
-                                                          0;
+                                                          0.0;
                                                     case 2:
                                                       return _rank['cognitive']
                                                               [2] ??
@@ -497,17 +467,6 @@ class _SegmentsPageState extends State<ResultSummary> {
                                               ),
                                               leftTitles: SideTitles(
                                                 showTitles: false,
-                                                getTextStyles: (context,
-                                                        value) =>
-                                                    const TextStyle(
-                                                        color:
-                                                            Color(0xff7589a2),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 16),
-                                                margin: 8,
-                                                reservedSize: 28,
-                                                interval: 1,
                                               ),
                                             ),
                                             borderData: FlBorderData(
@@ -557,26 +516,54 @@ class _SegmentsPageState extends State<ResultSummary> {
                               fontWeight: FontWeight.w600)),
                     ),
                     Row(children: <Widget>[
-                      !isLoading
-                          ? SizedBox(
-                              height: 130,
+                      if (!isLoading)
+                        Column(children: [
+                          SizedBox(
+                              height: 60,
                               width: size / 2,
                               child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(_rank['cognitive'][0],
-                                      style: TextStyle(
-                                          fontSize: 25, color: Colors.black))))
-                          : Text(""),
-                      !isLoading
-                          ? SizedBox(
-                              height: 130,
+                                alignment: Alignment.center,
+                                child: Text(_rank['cognitive'][0],
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.black)),
+                              )),
+                          SizedBox(
+                              height: 60,
                               width: size / 2,
                               child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(_rank['cognitive'][1],
-                                      style: TextStyle(
-                                          fontSize: 25, color: Colors.black))))
-                          : Text(""),
+                                alignment: Alignment.center,
+                                child: Text(
+                                    _scores['cognitive'][0].toStringAsFixed(1),
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.black)),
+                              )),
+                        ])
+                      else
+                        Text(""),
+                      if (!isLoading)
+                        Column(children: [
+                          SizedBox(
+                              height: 60,
+                              width: size / 2,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(_rank['cognitive'][1],
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.black)),
+                              )),
+                          SizedBox(
+                              height: 60,
+                              width: size / 2,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                    _scores['cognitive'][1].toStringAsFixed(1),
+                                    style: TextStyle(
+                                        fontSize: 25, color: Colors.black)),
+                              )),
+                        ])
+                      else
+                        Text(""),
                     ]),
                     SizedBox(height: 24),
                     Divider(color: Colors.black38),
@@ -722,92 +709,33 @@ class _SegmentsPageState extends State<ResultSummary> {
                                             BarChartData(
                                               maxY: 63,
                                               barTouchData: BarTouchData(
-                                                  touchTooltipData:
-                                                      BarTouchTooltipData(
-                                                    tooltipBgColor:
-                                                        Colors.grey[400],
-                                                    tooltipPadding:
-                                                        const EdgeInsets.only(
-                                                            left: 5,
-                                                            right: 4,
-                                                            top: 4,
-                                                            bottom: 1),
-                                                    tooltipMargin: 8,
-                                                    getTooltipItem: (
-                                                      BarChartGroupData group,
-                                                      int groupIndex,
-                                                      BarChartRodData rod,
-                                                      int rodIndex,
-                                                    ) =>
-                                                        BarTooltipItem(
-                                                      rod.y.round().toString(),
-                                                      const TextStyle(
-                                                        color: Colors.white,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                                touchTooltipData:
+                                                    BarTouchTooltipData(
+                                                  tooltipBgColor:
+                                                      Colors.grey[400],
+                                                  tooltipPadding:
+                                                      const EdgeInsets.only(
+                                                          left: 5,
+                                                          right: 4,
+                                                          top: 4,
+                                                          bottom: 1),
+                                                  tooltipMargin: 8,
+                                                  getTooltipItem: (
+                                                    BarChartGroupData group,
+                                                    int groupIndex,
+                                                    BarChartRodData rod,
+                                                    int rodIndex,
+                                                  ) =>
+                                                      BarTooltipItem(
+                                                    rod.y.round().toString(),
+                                                    const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
                                                     ),
                                                   ),
-                                                  touchCallback:
-                                                      (FlTouchEvent event,
-                                                          response) {
-                                                    if (response == null ||
-                                                        response.spot == null) {
-                                                      setState(() {
-                                                        touchedGroupIndex = -1;
-                                                        showingBarGroups =
-                                                            List.of(
-                                                                rawBarGroups);
-                                                      });
-                                                      return;
-                                                    }
-
-                                                    touchedGroupIndex = response
-                                                        .spot
-                                                        .touchedBarGroupIndex;
-
-                                                    setState(() {
-                                                      if (!event
-                                                          .isInterestedForInteractions) {
-                                                        touchedGroupIndex = -1;
-                                                        showingBarGroups =
-                                                            List.of(
-                                                                rawBarGroups);
-                                                        return;
-                                                      }
-                                                      showingBarGroups =
-                                                          List.of(rawBarGroups);
-                                                      if (touchedGroupIndex !=
-                                                          -1) {
-                                                        var sum = 0.0;
-                                                        for (var rod
-                                                            in showingBarGroups[
-                                                                    touchedGroupIndex]
-                                                                .barRods) {
-                                                          sum += rod.y;
-                                                        }
-                                                        final avg = sum /
-                                                            showingBarGroups[
-                                                                    touchedGroupIndex]
-                                                                .barRods
-                                                                .length;
-
-                                                        showingBarGroups[
-                                                                touchedGroupIndex] =
-                                                            showingBarGroups[
-                                                                    touchedGroupIndex]
-                                                                .copyWith(
-                                                          barRods: showingBarGroups[
-                                                                  touchedGroupIndex]
-                                                              .barRods
-                                                              .map((rod) {
-                                                            return rod.copyWith(
-                                                                y: avg);
-                                                          }).toList(),
-                                                        );
-                                                      }
-                                                    });
-                                                  }),
+                                                ),
+                                              ),
                                               titlesData: FlTitlesData(
                                                 show: true,
                                                 rightTitles: SideTitles(

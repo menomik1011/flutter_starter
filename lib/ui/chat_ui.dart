@@ -12,14 +12,11 @@ import 'components/components.dart';
 
 // ChatMessageModel _chatMessagesModel = ChatMessageModel(id: 0, message: '', bot: '', dist: '');
 class ChatScreen extends StatefulWidget {
-  static const String id = 'chat_screen9';
-
   @override
   _ChatScreenState createState() => _ChatScreenState();
 }
 
 class _ChatScreenState extends State<ChatScreen> {
-  String email = currentUser.email;
   String text = '음성이나 텍스트를 입력해주세요';
   String message = '안녕하세요? \n대화형 문진에 오신걸 환영합니다.';
   String distType = '';

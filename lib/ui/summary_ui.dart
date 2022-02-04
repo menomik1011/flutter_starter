@@ -31,6 +31,7 @@ class ResultSummary extends StatefulWidget {
 }
 
 class _SegmentsPageState extends State<ResultSummary> {
+  double cardClickElevation = 0;
   int _currentIndex = 0;
   int touchedGroupIndex = -1;
   final Color leftBarColor = Colors.blue[200];
@@ -214,8 +215,10 @@ class _SegmentsPageState extends State<ResultSummary> {
                               ? SliderThemeData(
                                   trackHeight: 10,
                                   thumbColor: _pointerValue > 28
-                                      ? Colors.orange[200]
-                                      : Colors.grey[100],
+                                      ? Colors.red[200]
+                                      : _pointerValue > 20 && _pointerValue < 28
+                                          ? Colors.orange[100]
+                                          : Colors.green[200],
                                   activeTickMarkColor: Colors.white,
                                   showValueIndicator: ShowValueIndicator.always,
                                   activeTrackColor: _pointerValue > 10 &&
@@ -349,138 +352,153 @@ class _SegmentsPageState extends State<ResultSummary> {
                             padding: const EdgeInsets.all(10.0),
                             child: AspectRatio(
                               aspectRatio: 1,
-                              child: Card(
-                                elevation: 4,
-                                shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(35)),
-                                color: Colors.white,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.stretch,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    mainAxisSize: MainAxisSize.max,
-                                    children: <Widget>[
-                                      SizedBox(height: 12),
-                                      Align(
-                                        alignment: Alignment.center,
-                                        child: Text("요소별 측정치",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.w600)),
-                                      ),
-                                      Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                      ),
-                                      Expanded(
-                                        child: BarChart(
-                                          BarChartData(
-                                            maxY: 4,
-                                            barTouchData: BarTouchData(
-                                              touchTooltipData:
-                                                  BarTouchTooltipData(
-                                                tooltipBgColor:
-                                                    Colors.grey[600],
-                                                tooltipPadding:
-                                                    const EdgeInsets.only(
-                                                        left: 5,
-                                                        right: 4,
-                                                        top: 4,
-                                                        bottom: 1),
-                                                tooltipMargin: 8,
-                                                getTooltipItem: (
-                                                  BarChartGroupData group,
-                                                  int groupIndex,
-                                                  BarChartRodData rod,
-                                                  int rodIndex,
-                                                ) =>
-                                                    BarTooltipItem(
-                                                  rod.y.toStringAsFixed(1),
-                                                  const TextStyle(
-                                                    color: Colors.white,
-                                                    fontWeight: FontWeight.bold,
+                              child: GestureDetector(
+                                onTap: () => {
+                                  setState(() => {cardClickElevation = 0})
+                                },
+                                child: Card(
+                                  elevation: cardClickElevation,
+                                  shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(35)),
+                                  color: Colors.white,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.stretch,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: <Widget>[
+                                        SizedBox(height: 12),
+                                        Align(
+                                          alignment: Alignment.center,
+                                          child: Text("요소별 측정치",
+                                              style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.w600)),
+                                        ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                        ),
+                                        Expanded(
+                                          child: BarChart(
+                                            BarChartData(
+                                              maxY: 4,
+                                              barTouchData: BarTouchData(
+                                                touchTooltipData:
+                                                    BarTouchTooltipData(
+                                                  tooltipBgColor:
+                                                      Colors.grey[600],
+                                                  tooltipPadding:
+                                                      const EdgeInsets.only(
+                                                          left: 5,
+                                                          right: 4,
+                                                          top: 4,
+                                                          bottom: 1),
+                                                  tooltipMargin: 8,
+                                                  getTooltipItem: (
+                                                    BarChartGroupData group,
+                                                    int groupIndex,
+                                                    BarChartRodData rod,
+                                                    int rodIndex,
+                                                  ) =>
+                                                      BarTooltipItem(
+                                                    rod.y.toStringAsFixed(1),
+                                                    const TextStyle(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
-                                            ),
-                                            titlesData: FlTitlesData(
-                                              show: true,
-                                              rightTitles:
-                                                  SideTitles(showTitles: false),
-                                              topTitles:
-                                                  SideTitles(showTitles: false),
-                                              bottomTitles: SideTitles(
-                                                showTitles: true,
-                                                getTextStyles: (context,
-                                                        value) =>
-                                                    const TextStyle(
-                                                        color:
-                                                            Color(0xff7589a2),
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 16),
-                                                margin: 20,
-                                                getTitles: (double value) {
-                                                  switch (value.toInt()) {
-                                                    case 7:
-                                                      return _rank['cognitive']
-                                                              [7] ??
-                                                          0.0;
-                                                    case 6:
-                                                      return _rank['cognitive']
-                                                              [6] ??
-                                                          0.0;
-                                                    case 5:
-                                                      return _rank['cognitive']
-                                                              [5] ??
-                                                          0.0;
-                                                    case 4:
-                                                      return _rank['cognitive']
-                                                              [4] ??
-                                                          0.0;
-                                                    case 3:
-                                                      return _rank['cognitive']
-                                                              [3] ??
-                                                          0.0;
-                                                    case 2:
-                                                      return _rank['cognitive']
-                                                              [2] ??
-                                                          0;
-                                                    case 1:
-                                                      return _rank['cognitive']
-                                                              [1] ??
-                                                          0;
-                                                    case 0:
-                                                      return _rank['cognitive']
-                                                              [0] ??
-                                                          0;
-                                                    default:
-                                                      return '';
-                                                  }
-                                                },
+                                              titlesData: FlTitlesData(
+                                                show: true,
+                                                rightTitles: SideTitles(
+                                                    showTitles: false),
+                                                topTitles: SideTitles(
+                                                    showTitles: false),
+                                                bottomTitles: SideTitles(
+                                                  showTitles: true,
+                                                  getTextStyles: (context,
+                                                          value) =>
+                                                      const TextStyle(
+                                                          color:
+                                                              Color(0xff7589a2),
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 16),
+                                                  margin: 20,
+                                                  getTitles: (double value) {
+                                                    switch (value.toInt()) {
+                                                      case 7:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [7] ??
+                                                            0.0;
+                                                      case 6:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [6] ??
+                                                            0.0;
+                                                      case 5:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [5] ??
+                                                            0.0;
+                                                      case 4:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [4] ??
+                                                            0.0;
+                                                      case 3:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [3] ??
+                                                            0.0;
+                                                      case 2:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [2] ??
+                                                            0;
+                                                      case 1:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [1] ??
+                                                            0;
+                                                      case 0:
+                                                        return _rank[
+                                                                    'cognitive']
+                                                                [0] ??
+                                                            0;
+                                                      default:
+                                                        return '';
+                                                    }
+                                                  },
+                                                ),
+                                                leftTitles: SideTitles(
+                                                  showTitles: false,
+                                                ),
                                               ),
-                                              leftTitles: SideTitles(
-                                                showTitles: false,
+                                              borderData: FlBorderData(
+                                                show: false,
                                               ),
+                                              barGroups: cogGroups(),
+                                              gridData: FlGridData(show: false),
                                             ),
-                                            borderData: FlBorderData(
-                                              show: false,
-                                            ),
-                                            barGroups: cogGroups(),
-                                            gridData: FlGridData(show: false),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 12,
-                                      ),
-                                    ],
+                                        const SizedBox(
+                                          height: 12,
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),

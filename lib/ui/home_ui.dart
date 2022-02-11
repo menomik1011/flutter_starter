@@ -64,7 +64,7 @@ class HomeUI extends StatelessWidget {
                 ),
               ),
               floatingActionButton: FloatingActionButton(onPressed: () {
-                Get.to(() => ChatScreen());
+                Get.to(() => MyList());
               })),
     );
   }

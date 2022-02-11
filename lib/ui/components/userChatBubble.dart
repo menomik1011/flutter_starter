@@ -14,7 +14,7 @@ class UserChatBubble extends StatelessWidget {
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       child: Row(
-        // if message ID is not '2' treats 'user' rest of numbers are for chatbot actions
+        // if message ID is not '2' generate user chat bubble otherwise ID is '1' generate bot chat bubble
         mainAxisAlignment: chatMessageModelRecord.id != 2
             ? MainAxisAlignment.end
             : MainAxisAlignment.start,
@@ -31,15 +31,15 @@ class UserChatBubble extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: chatMessageModelRecord.id != 2
                     ? BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                  topLeft: Radius.circular(15.0),
-                )
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0),
+                        topLeft: Radius.circular(15.0),
+                      )
                     : BorderRadius.only(
-                  bottomLeft: Radius.circular(15.0),
-                  bottomRight: Radius.circular(15.0),
-                  topRight: Radius.circular(15.0),
-                ),
+                        bottomLeft: Radius.circular(15.0),
+                        bottomRight: Radius.circular(15.0),
+                        topRight: Radius.circular(15.0),
+                      ),
                 color: chatMessageModelRecord.id != 2
                     ? darkblueColor
                     : primaryColor,
@@ -51,7 +51,7 @@ class UserChatBubble extends StatelessWidget {
               child: Text(
                 "${chatMessageModelRecord.message}",
                 style: TextStyle(
-                  fontSize: 17,
+                  fontSize: 15,
                   // fontWeight: FontWeight.w500,
                   color: Colors.white,
                 ),

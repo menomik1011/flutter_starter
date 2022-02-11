@@ -596,7 +596,11 @@ class _SegmentsPageState extends State<ResultSummary> {
                             fontWeight: FontWeight.w600,
                           )),
                     ),
-                    SizedBox(height: 10),
+                    Column(
+                      children: [
+                        SizedBox(height: 10),
+                      ],
+                    ),
                     Align(
                       alignment: Alignment.centerLeft,
                       child: Text("슬픈 감정을 자주 느끼시나요?",

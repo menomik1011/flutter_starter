@@ -208,7 +208,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                               child: Text(resultList["description"],
                                   style: TextStyle(
                                     color: Colors.black,
-                                    fontSize: 20,
+                                    fontSize: 17,
                                     fontWeight: FontWeight.w600,
                                   )),
                             ),
@@ -217,7 +217,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                                 child: Text(resultList['icon'],
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 20,
+                                      fontSize: 22,
                                       fontWeight: FontWeight.w600,
                                     )))
                           ],
@@ -278,7 +278,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                         Text(resultList["solution"],
                             style: TextStyle(
                                 color: Colors.black,
-                                fontSize: 18,
+                                fontSize: 15,
                                 fontWeight: FontWeight.w500)),
                         SizedBox(height: 30)
                       ]),

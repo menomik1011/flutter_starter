@@ -200,14 +200,27 @@ class _SegmentsPageState extends State<ResultSummary> {
                           )),
                       child: Column(children: [
                         SizedBox(height: 30),
-                        Padding(
-                          padding: const EdgeInsets.only(right: 60.0),
-                          child: Text(resultList["description"],
-                              style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              )),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                  right: 60.0, left: 20.0),
+                              child: Text(resultList["description"],
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.w600,
+                                  )),
+                            ),
+                            Align(
+                                alignment: Alignment.center,
+                                child: Text(resultList['icon'],
+                                    style: TextStyle(
+                                      color: Colors.black,
+                                      fontSize: 20,
+                                      fontWeight: FontWeight.w600,
+                                    )))
+                          ],
                         ),
                         SizedBox(height: 15),
                         SliderTheme(

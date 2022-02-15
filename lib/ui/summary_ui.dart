@@ -204,25 +204,17 @@ class _SegmentsPageState extends State<ResultSummary> {
                           children: [
                             Padding(
                               padding: const EdgeInsets.only(
-                                  right: 60.0, left: 20.0),
+                                  right: 60.0, left: 40.0),
                               child: Text(resultList["description"],
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 17,
-                                    fontWeight: FontWeight.w600,
+                                    fontWeight: FontWeight.w500,
                                   )),
                             ),
-                            Align(
-                                alignment: Alignment.center,
-                                child: Text(resultList['icon'],
-                                    style: TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 22,
-                                      fontWeight: FontWeight.w600,
-                                    )))
                           ],
                         ),
-                        SizedBox(height: 15),
+                        SizedBox(height: 10),
                         SliderTheme(
                           data: !isLoading
                               ? SliderThemeData(
@@ -275,6 +267,7 @@ class _SegmentsPageState extends State<ResultSummary> {
                                 }),
                           ),
                         ),
+                        SizedBox(height: 10),
                         Text(resultList["solution"],
                             style: TextStyle(
                                 color: Colors.black,

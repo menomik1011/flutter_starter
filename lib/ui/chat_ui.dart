@@ -119,6 +119,7 @@ class _ChatScreenState extends State<ChatScreen> {
                               radius: 33,
                               backgroundImage:
                                   AssetImage("assets/images/model.png"),
+                              backgroundColor: Colors.white24,
                             ),
                             title: Text('MetaDoc',
                                 softWrap: true,

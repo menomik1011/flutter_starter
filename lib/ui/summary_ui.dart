@@ -9,6 +9,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_starter/controllers/controllers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:blinking_text/blinking_text.dart';
 
 final List<String> imagesList = [
   'https://i.insider.com/5eea8a48f0f419386721f9e8?width=1136&format=jpeg',
@@ -79,7 +80,7 @@ class _SegmentsPageState extends State<ResultSummary> {
 
       setState(() {
         resultList = items;
-        _pointerValue = resultList["bdisum"].toDouble();
+        _pointerValue = resultList["aft"].toDouble();
         _aft = resultList["aft"].toDouble();
         _smt = resultList["smt"].toDouble();
         _cgt = resultList["cgt"].toDouble();
@@ -209,12 +210,28 @@ class _SegmentsPageState extends State<ResultSummary> {
                                   style: TextStyle(
                                     color: Colors.black,
                                     fontSize: 17,
-                                    fontWeight: FontWeight.w500,
+                                    fontWeight: FontWeight.w600,
                                   )),
                             ),
                           ],
                         ),
                         SizedBox(height: 10),
+                        BlinkText(resultList["notice"],
+                            beginColor: _pointerValue > 10 && _pointerValue < 18
+                                ? Colors.greenAccent
+                                : _pointerValue > 18 && _pointerValue < 28
+                                    ? Colors.orangeAccent
+                                    : _pointerValue > 28 && _pointerValue < 38
+                                        ? Colors.redAccent
+                                        : _pointerValue > 38 &&
+                                                _pointerValue < 63
+                                            ? Colors.red[600]
+                                            : Colors.blueAccent,
+                            endColor: Colors.white,
+                            times: 10,
+                            duration: Duration(milliseconds: 500),
+                            style: TextStyle(
+                                fontSize: 17, fontWeight: FontWeight.w600)),
                         SliderTheme(
                           data: !isLoading
                               ? SliderThemeData(
@@ -267,12 +284,15 @@ class _SegmentsPageState extends State<ResultSummary> {
                                 }),
                           ),
                         ),
-                        SizedBox(height: 10),
-                        Text(resultList["solution"],
-                            style: TextStyle(
-                                color: Colors.black,
-                                fontSize: 15,
-                                fontWeight: FontWeight.w500)),
+                        !isLoading
+                            ? Column(children: [
+                                Text(resultList["solution"],
+                                    style: TextStyle(
+                                        color: Colors.black,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500)),
+                              ])
+                            : Text(""),
                         SizedBox(height: 30)
                       ]),
                     ),

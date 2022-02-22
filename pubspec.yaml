@@ -33,6 +33,7 @@ dependencies:
   sliding_up_panel: ^2.0.0+1
   linked_scroll_controller: ^0.2.0
   youtube_api: ^1.0.4
+  blinking_text: ^1.0.1+2
 
 
 dependency_overrides:

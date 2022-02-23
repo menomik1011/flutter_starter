@@ -54,63 +54,18 @@ class _ChatScreenState extends State<ChatScreen>
   BackPressBehavior behavior = BackPressBehavior.PERSIST;
 
   List<Widget> get _content => [
-        Expanded(
-          child: Card(
-            color: Colors.white,
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: <Widget>[
-                const ListTile(
-                  leading: CircleAvatar(
-                    radius: 28,
-                    backgroundImage: AssetImage("assets/images/model.png"),
-                    backgroundColor: Colors.white24,
-                  ),
-                  title: Align(
-                    alignment: Alignment.center,
-                    child: Text('MetaDoc',
-                        softWrap: true,
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontSize: 20, color: Colors.black)),
-                  ),
-                ),
-
-                // isText
-                //     ? Container(
-                //         width: 330,
-                //         height: 50,
-                //         decoration: BoxDecoration(
-                //             color: Colors.black26,
-                //             borderRadius: BorderRadius.circular(20)),
-                //         child: TextField(
-                //           autofocus: true,
-                //           decoration: InputDecoration(
-                //               fillColor: Colors.white30,
-                //               filled: true,
-                //               border: InputBorder.none),
-                //           onSubmitted: (value) {
-                //             setState(() => this.text = value.trim());
-                //             setState(() => this.isText = false);
-                //             // text = "";
-                //             _messageTextController.clear();
-                //             bubbleGenerate(value.trim(), 1, '-');
-                //             maxScrolling();
-                //             // straightCommand(value, isText);
-                //             toggleKeyboard();
-                //           },
-                //         ),
-                //       )
-                //     : IconButton(
-                //         icon: const Icon(Icons.keyboard),
-                //         tooltip: '키보드 입력 버튼',
-                //         onPressed: () {
-                //           setState(() => this.isText = true);
-                //         },
-                //       ),
-              ],
-            ),
+        ListTile(
+          onTap: () {
+            pc.popWithThrowResult(result: 'Pizza').then((_) {
+              setState(() {
+                selected = "You ordered Pizza.\n\nNow you can go back.";
+                behavior = BackPressBehavior.POP;
+              });
+            });
+          },
+          title: Text(
+            'Pizza',
+            style: Theme.of(context).textTheme.headline6,
           ),
         ),
         ListTile(
@@ -272,93 +227,124 @@ class _ChatScreenState extends State<ChatScreen>
             });
             return false;
           },
-          child: SlidingPanel(
-            panelController: pc,
-            initialState: InitialPanelState.dismissed,
-            backdropConfig:
-                BackdropConfig(enabled: true, shadowColor: Colors.blue),
-            decoration: PanelDecoration(
-              margin: EdgeInsets.all(8),
-              borderRadius: BorderRadius.all(
-                Radius.circular(8),
-              ),
-            ),
-            content: PanelContent(
-              panelContent: _content,
-              headerWidget: PanelHeaderWidget(
-                headerContent: isText
-                    ? Container(
-                        width: 330,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            color: Colors.black26,
-                            borderRadius: BorderRadius.circular(20)),
-                        child: TextField(
-                          autofocus: true,
-                          decoration: InputDecoration(
-                              fillColor: Colors.white30,
-                              filled: true,
-                              border: InputBorder.none),
-                          onSubmitted: (value) {
-                            setState(() => this.text = value.trim());
-                            setState(() => this.isText = false);
-                            // text = "";
-                            _messageTextController.clear();
-                            bubbleGenerate(value.trim(), 1, '-');
-                            maxScrolling();
-                            // straightCommand(value, isText);
-                            toggleKeyboard();
-                          },
-                        ),
-                      )
-                    : IconButton(
-                        icon: const Icon(Icons.keyboard),
-                        tooltip: '키보드 입력 버튼',
-                        onPressed: () {
-                          setState(() => this.isText = true);
-                        },
-                      ),
-                decoration: PanelDecoration(
-                  margin: EdgeInsets.all(16),
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(8),
-                    topRight: Radius.circular(8),
-                    bottomLeft: Radius.circular(4),
-                    bottomRight: Radius.circular(4),
-                  ),
-                ),
-                options: PanelHeaderOptions(
-                  centerTitle: true,
-                  elevation: 16,
-                  leading: IconButton(
-                    onPressed: () {
-                      if (pc.currentState == PanelState.expanded)
-                        pc.close();
-                      else
-                        pc.expand();
-                    },
-                    icon: AnimatedIcon(
-                      icon: AnimatedIcons.menu_close,
-                      progress: animationController.view,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[
+              MessagesStream(),
+              Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                    top: BorderSide(
+                      color: primaryColor,
+                      width: 1.0,
                     ),
                   ),
                 ),
-              ),
-              bodyContent: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    MessagesStream(),
-                    TextButton(
-                      onPressed: pc.close,
-                      child: Text('Open the panel'),
+                    Expanded(
+                      child: Card(
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Column(
+                          children: <Widget>[
+                            const ListTile(
+                              leading: CircleAvatar(
+                                radius: 33,
+                                backgroundImage:
+                                    AssetImage("assets/images/model.png"),
+                                backgroundColor: Colors.white24,
+                              ),
+                              title: Text('MetaDoc',
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 20, color: Colors.black)),
+                              subtitle: Text('듣고 있습니다',
+                                  style: TextStyle(
+                                      fontSize: 17, color: Colors.black54)),
+                            ),
+                            isListening
+                                ? LinearProgressIndicator(
+                                    backgroundColor: Colors.pink[100],
+                                  )
+                                : LinearProgressIndicator(
+                                    value: 0,
+                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(
+                                  top: 10, bottom: 15, left: 10, right: 10),
+                              child: Text(message,
+                                  style: TextStyle(
+                                      fontSize: 22, color: Colors.black),
+                                  maxLines: 3),
+                            ),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 14, right: 14),
+                              child: Center(
+                                child: SubstringHighlight(
+                                  text: text,
+                                  terms: Command.all,
+                                  textStyle: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.black54,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                  textStyleHighlight: TextStyle(
+                                    fontSize: 20.0,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            isText
+                                ? Container(
+                                    width: 330,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        color: Colors.black26,
+                                        borderRadius:
+                                            BorderRadius.circular(20)),
+                                    child: TextField(
+                                      autofocus: true,
+                                      decoration: InputDecoration(
+                                          fillColor: Colors.white30,
+                                          filled: true,
+                                          border: InputBorder.none),
+                                      onSubmitted: (value) {
+                                        setState(
+                                            () => this.text = value.trim());
+                                        setState(() => this.isText = false);
+                                        // text = "";
+                                        _messageTextController.clear();
+                                        bubbleGenerate(value.trim(), 1, '-');
+                                        maxScrolling();
+                                        // straightCommand(value, isText);
+                                        toggleKeyboard();
+                                      },
+                                    ),
+                                  )
+                                : IconButton(
+                                    icon: const Icon(Icons.keyboard),
+                                    tooltip: '키보드 입력 버튼',
+                                    onPressed: () {
+                                      setState(() => this.isText = true);
+                                    },
+                                  ),
+                          ],
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 150),
                   ],
                 ),
               ),
-            ),
+            ],
           ),
         ),
       ),

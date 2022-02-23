@@ -9,15 +9,12 @@ class TwoStateExample extends StatefulWidget {
 class _TwoStateExampleState extends State<TwoStateExample>
     with SingleTickerProviderStateMixin {
   PanelController pc;
-
   AnimationController animationController;
 
   @override
   void initState() {
     super.initState();
-
     pc = PanelController();
-
     animationController = AnimationController(vsync: this);
   }
 
@@ -258,7 +255,7 @@ class _TwoStateExampleState extends State<TwoStateExample>
                       style: Theme.of(context).textTheme.subtitle1,
                     ),
                   ),
-                  RaisedButton(
+                  TextButton(
                     onPressed: pc.close,
                     child: Text('Open the panel'),
                   ),

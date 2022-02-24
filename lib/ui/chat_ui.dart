@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter_starter/controllers/controllers.dart';
 import 'package:flutter_starter/helpers/helpers.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_starter/models/models.dart';
 import 'package:sliding_panel/sliding_panel.dart';
 import 'package:flutter_starter/ui/summary_ui.dart';
@@ -22,7 +23,7 @@ class _ChatScreenState extends State<ChatScreen>
   String text = '음성이나 텍스트를 입력해주세요';
   String message = '안녕하세요? \n대화형 문진에 오신걸 환영합니다.';
   String distType = '';
-
+  bool draggable = true;
   bool isListening = false;
   bool isText = false;
   bool isCommand = false;
@@ -54,7 +55,7 @@ class _ChatScreenState extends State<ChatScreen>
   BackPressBehavior behavior = BackPressBehavior.PERSIST;
 
   List<Widget> get _content => [
-        Expanded(
+        Container(
           child: Card(
             color: Colors.white,
             shape: RoundedRectangleBorder(
@@ -76,39 +77,6 @@ class _ChatScreenState extends State<ChatScreen>
                         style: TextStyle(fontSize: 20, color: Colors.black)),
                   ),
                 ),
-
-                // isText
-                //     ? Container(
-                //         width: 330,
-                //         height: 50,
-                //         decoration: BoxDecoration(
-                //             color: Colors.black26,
-                //             borderRadius: BorderRadius.circular(20)),
-                //         child: TextField(
-                //           autofocus: true,
-                //           decoration: InputDecoration(
-                //               fillColor: Colors.white30,
-                //               filled: true,
-                //               border: InputBorder.none),
-                //           onSubmitted: (value) {
-                //             setState(() => this.text = value.trim());
-                //             setState(() => this.isText = false);
-                //             // text = "";
-                //             _messageTextController.clear();
-                //             bubbleGenerate(value.trim(), 1, '-');
-                //             maxScrolling();
-                //             // straightCommand(value, isText);
-                //             toggleKeyboard();
-                //           },
-                //         ),
-                //       )
-                //     : IconButton(
-                //         icon: const Icon(Icons.keyboard),
-                //         tooltip: '키보드 입력 버튼',
-                //         onPressed: () {
-                //           setState(() => this.isText = true);
-                //         },
-                //       ),
               ],
             ),
           ),
@@ -125,6 +93,7 @@ class _ChatScreenState extends State<ChatScreen>
         ListTile(
           onTap: () {
             pc.sendResult(result: 'Pasta');
+            pc.close();
             // THIS WILL NOT CLOSE THE PANEL, JUST SEND THE RESULT
           },
           title: Text(
@@ -219,22 +188,23 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterTop,
-      floatingActionButton: AvatarGlow(
-        animate: isListening,
-        endRadius: 75,
-        glowColor: Theme.of(context).primaryColor.withOpacity(0.5),
-        child: FloatingActionButton(
-          child: Icon(isListening ? Icons.mic : Icons.mic_none, size: 36),
-          onPressed: () {
-            setState(() => isText = false);
-            setState(() => text = '');
-            _messageTextController.clear();
-            toggleRecording();
-          },
-          backgroundColor: darkblueColor,
-        ),
-      ),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterTop,
+      // floatingActionButton: AvatarGlow(
+      //   animate: isListening,
+      //   endRadius: 75,
+      //   glowColor: Theme.of(context).primaryColor.withOpacity(0.5),
+      //   child: FloatingActionButton(
+      //     child: Icon(isListening ? Icons.mic : Icons.mic_none, size: 36),
+      //     onPressed: () {
+      //       setState(() => text = "");
+      //       setState(() => isText = false);
+      //       setState(() => text = '');
+      //       _messageTextController.clear();
+      //       toggleRecording();
+      //     },
+      //     backgroundColor: darkblueColor,
+      //   ),
+      // ),
       backgroundColor: secondaryColor,
       appBar: AppBar(
         title: Row(
@@ -274,6 +244,7 @@ class _ChatScreenState extends State<ChatScreen>
           },
           child: SlidingPanel(
             panelController: pc,
+            isDraggable: draggable,
             initialState: InitialPanelState.dismissed,
             backdropConfig:
                 BackdropConfig(enabled: true, shadowColor: Colors.blue),
@@ -302,11 +273,10 @@ class _ChatScreenState extends State<ChatScreen>
                           onSubmitted: (value) {
                             setState(() => this.text = value.trim());
                             setState(() => this.isText = false);
-                            // text = "";
+                            setState(() => this.draggable = true);
+                            pc.close();
                             _messageTextController.clear();
                             bubbleGenerate(value.trim(), 1, '-');
-                            maxScrolling();
-                            // straightCommand(value, isText);
                             toggleKeyboard();
                           },
                         ),
@@ -315,7 +285,9 @@ class _ChatScreenState extends State<ChatScreen>
                         icon: const Icon(Icons.keyboard),
                         tooltip: '키보드 입력 버튼',
                         onPressed: () {
+                          pc.close().then((e) => maxScrolling());
                           setState(() => this.isText = true);
+                          setState(() => this.draggable = false);
                         },
                       ),
                 decoration: PanelDecoration(
@@ -330,18 +302,22 @@ class _ChatScreenState extends State<ChatScreen>
                 options: PanelHeaderOptions(
                   centerTitle: true,
                   elevation: 16,
-                  leading: IconButton(
-                    onPressed: () {
-                      if (pc.currentState == PanelState.expanded)
-                        pc.close();
-                      else
-                        pc.expand();
-                    },
-                    icon: AnimatedIcon(
-                      icon: AnimatedIcons.menu_close,
-                      progress: animationController.view,
-                    ),
-                  ),
+                  leading: !isText
+                      ? IconButton(
+                          onPressed: () {
+                            if (pc.currentState == PanelState.expanded)
+                              pc
+                                  .close()
+                                  .then((currentState) => {maxScrolling()});
+                            else
+                              pc.expand();
+                          },
+                          icon: AnimatedIcon(
+                            icon: AnimatedIcons.menu_close,
+                            progress: animationController.view,
+                          ),
+                        )
+                      : null,
                 ),
               ),
               bodyContent: Center(
@@ -350,11 +326,52 @@ class _ChatScreenState extends State<ChatScreen>
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: <Widget>[
                     MessagesStream(),
-                    TextButton(
-                      onPressed: pc.close,
-                      child: Text('Open the panel'),
-                    ),
-                    SizedBox(height: 150),
+                    isText
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment
+                                .center, //Center Row contents horizontally,
+                            crossAxisAlignment: CrossAxisAlignment
+                                .center, //Center Row contents vertically,
+                            children: <Widget>[
+                                IconButton(
+                                  icon: Icon(Icons.close),
+                                  onPressed: () {
+                                    setState(() => isText = false);
+                                    setState(() => draggable = true);
+                                    pc.close();
+                                  },
+                                  // child: Text('입력 취소'),
+                                ),
+                                AvatarGlow(
+                                    animate: isListening,
+                                    endRadius: 33,
+                                    glowColor: Theme.of(context)
+                                        .primaryColor
+                                        .withOpacity(0.5),
+                                    child: IconButton(
+                                      icon: Icon(Icons.mic_none),
+                                      onPressed: () {
+                                        maxScrolling();
+                                        toggleRecording();
+                                      },
+                                      // child: Text('음성 입력'),
+                                    )),
+                                IconButton(
+                                  icon: Icon(Icons.arrow_downward),
+                                  onPressed: () {
+                                    maxScrolling();
+                                  },
+                                  // child: Text('음성 입력'),
+                                )
+                              ])
+                        : IconButton(
+                            icon: Icon(Icons.chat),
+                            onPressed: () {
+                              pc.close();
+                            },
+                            // child: Text('패널 열기'),
+                          ),
+                    SizedBox(height: 130),
                   ],
                 ),
               ),

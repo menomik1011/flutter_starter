@@ -109,102 +109,13 @@ class _ChatScreenState extends State<ChatScreen>
             'Malai Kofta',
             style: Theme.of(context).textTheme.headline6,
           ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'French Fries');
-          },
-          title: Text(
-            'French Fries',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Samosas');
-          },
-          title: Text(
-            'Samosas',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Toast');
-          },
-          title: Text(
-            'Toast',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Frankie');
-          },
-          title: Text(
-            'Frankie',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Burger');
-          },
-          title: Text(
-            'Burger',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Salad');
-          },
-          title: Text(
-            'Salad',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Chips');
-          },
-          title: Text(
-            'Chips',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
-        ListTile(
-          onTap: () {
-            pc.popWithResult(result: 'Cookies');
-          },
-          title: Text(
-            'Cookies',
-            style: Theme.of(context).textTheme.headline6,
-          ),
-        ),
+        )
       ];
   final _messageTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButtonLocation: FloatingActionButtonLocation.miniCenterTop,
-      // floatingActionButton: AvatarGlow(
-      //   animate: isListening,
-      //   endRadius: 75,
-      //   glowColor: Theme.of(context).primaryColor.withOpacity(0.5),
-      //   child: FloatingActionButton(
-      //     child: Icon(isListening ? Icons.mic : Icons.mic_none, size: 36),
-      //     onPressed: () {
-      //       setState(() => text = "");
-      //       setState(() => isText = false);
-      //       setState(() => text = '');
-      //       _messageTextController.clear();
-      //       toggleRecording();
-      //     },
-      //     backgroundColor: darkblueColor,
-      //   ),
-      // ),
       backgroundColor: secondaryColor,
       appBar: AppBar(
         title: Row(
@@ -285,9 +196,12 @@ class _ChatScreenState extends State<ChatScreen>
                         icon: const Icon(Icons.keyboard),
                         tooltip: '키보드 입력 버튼',
                         onPressed: () {
-                          pc.close().then((e) => maxScrolling());
                           setState(() => this.isText = true);
                           setState(() => this.draggable = false);
+
+                          pc.close().then((e) => new Timer(
+                              const Duration(milliseconds: 500),
+                              () => maxScrolling()));
                         },
                       ),
                 decoration: PanelDecoration(
@@ -351,7 +265,10 @@ class _ChatScreenState extends State<ChatScreen>
                                     child: IconButton(
                                       icon: Icon(Icons.mic_none),
                                       onPressed: () {
-                                        maxScrolling();
+                                        // maxScrolling();
+                                        setState(() => isText = false);
+                                        setState(() => text = '');
+                                        _messageTextController.clear();
                                         toggleRecording();
                                       },
                                       // child: Text('음성 입력'),
@@ -364,11 +281,26 @@ class _ChatScreenState extends State<ChatScreen>
                                   // child: Text('음성 입력'),
                                 )
                               ])
-                        : IconButton(
-                            icon: Icon(Icons.chat),
+                        : TextButton(
+                            child: Text.rich(
+                              TextSpan(
+                                children: <InlineSpan>[
+                                  TextSpan(text: '대화하기'),
+                                  WidgetSpan(
+                                      child: Icon(
+                                    Icons.chat,
+                                    color: Colors.grey,
+                                    size: 20,
+                                  )),
+                                ],
+                              ),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 17),
+                            ),
                             onPressed: () {
                               pc.close();
                             },
+
                             // child: Text('패널 열기'),
                           ),
                     SizedBox(height: 130),
@@ -393,7 +325,7 @@ class _ChatScreenState extends State<ChatScreen>
     if (text != ''.trim()) {
       await dioConnection(bdi_call, email, text).then((value) => setState(
           () => [message = value[0], distType = value[1], flow = value[2]]));
-      maxScrolling();
+      // maxScrolling();
     } else {
       setState(() => {isText = false});
     }
@@ -410,11 +342,11 @@ class _ChatScreenState extends State<ChatScreen>
           } else if (!isListening) {
             Future.delayed(Duration(seconds: 2), () async {
               bubbleGenerate(text, 1, '');
-              maxScrolling();
+              // maxScrolling();
 
               await dioConnection(bdi_call, email, text)
                   .then((value) => setState(() => message = value[0]));
-              maxScrolling();
+              // maxScrolling();
             });
           } else {
             message = "";

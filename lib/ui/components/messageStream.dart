@@ -6,26 +6,31 @@ import 'package:flutter_starter/ui/components/components.dart';
 final ScrollController _controller = new ScrollController();
 
 final StreamController<ChatMessageModel> _chatMessagesStreamController =
-StreamController<ChatMessageModel>.broadcast();
+    StreamController<ChatMessageModel>.broadcast();
 final Stream<ChatMessageModel> _chatMessagesStream =
     _chatMessagesStreamController.stream;
 
-
-void maxScrolling(){
+void maxScrolling() {
   final position = _controller.position.maxScrollExtent;
   _controller.animateTo(
-    position+300.0,
+    position + 300.0,
     duration: Duration(milliseconds: 700),
     curve: Curves.easeOut,
   );
 }
 
+void sendMessage(String s) async {
+  s = s.trim();
 
-void bubbleGenerate(String _message, int _id, String _dist){
+  bubbleGenerate(s, 2, "");
+}
+
+void bubbleGenerate(String _message, int _id, String _dist) {
   debugPrint(
       'Adding a ChatMessageModel with the message $_message and $_dist to the Stream');
   ChatMessageModel chatMessageModelRecord =
-  ChatMessageModel(message: _message, id: _id, dist: _dist, bot: '');
+      ChatMessageModel(message: _message, id: _id, dist: _dist, bot: '');
+  maxScrolling();
   return _chatMessagesStreamController.add(
     chatMessageModelRecord,
   );
@@ -37,13 +42,11 @@ class MessagesStream extends StatefulWidget {
 }
 
 class _MessagesStreamState extends State<MessagesStream> {
-
   final List<ChatMessageModel> _allMessagesContainedInTheStream = [];
 
   @override
   void initState() {
     bool isCommand = false;
-
 
     _chatMessagesStream.listen((streamedMessages) {
       // _allMessagesContainedInTheStream.clear();
@@ -57,6 +60,7 @@ class _MessagesStreamState extends State<MessagesStream> {
   void dispose() {
     super.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<ChatMessageModel>(
@@ -72,7 +76,7 @@ class _MessagesStreamState extends State<MessagesStream> {
               if (snapshot.hasData) {
                 return UserChatBubble(
                   chatMessageModelRecord:
-                  _allMessagesContainedInTheStream[index],
+                      _allMessagesContainedInTheStream[index],
                 );
                 // }
               } else {
@@ -86,4 +90,3 @@ class _MessagesStreamState extends State<MessagesStream> {
     );
   }
 }
-

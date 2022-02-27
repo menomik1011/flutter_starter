@@ -8,11 +8,13 @@ import 'package:flutter_starter/ui/components/components.dart';
 import 'package:flutter_starter/helpers/helpers.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
+import 'package:kakao_flutter_sdk/all.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await GetStorage.init();
+  KakaoContext.clientId = '0298e7e53252f228f377dfeb867407e1';
   Get.put<AuthController>(AuthController());
   Get.put<ThemeController>(ThemeController());
   Get.put<LanguageController>(LanguageController());

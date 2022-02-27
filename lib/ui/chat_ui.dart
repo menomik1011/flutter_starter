@@ -367,6 +367,7 @@ Future<List> dioConnection(String _end, String _email, String _userMsg) async {
   String bdi = response.data["생성된 질문"]["질문"];
   String dist = response.data["생성된 질문"]["BDI"];
   String q_dist = response.data["사용자 입력 BDI 분류"]["분류 결과"];
+  String next_step = response.data["분석결과"]["다음 동작"];
   int yn = response.data["입력문장긍부정도"]["긍부정구분"]["분류 결과"];
   if (_userMsg != ''.trim()) {
     if (q_dist == "일반") {

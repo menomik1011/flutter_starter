@@ -19,11 +19,11 @@ void maxScrolling() {
   );
 }
 
-void sendMessage(String s) async {
-  s = s.trim();
+// void sendMessage(String s) async {
+//   s = s.trim();
 
-  bubbleGenerate(s, 2, "");
-}
+//   bubbleGenerate(s, 2, "");
+// }
 
 void bubbleGenerate(String _message, int _id, String _dist) {
   debugPrint(

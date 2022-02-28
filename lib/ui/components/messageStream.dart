@@ -31,6 +31,9 @@ void bubbleGenerate(String _message, int _id, String _dist) {
   ChatMessageModel chatMessageModelRecord =
       ChatMessageModel(message: _message, id: _id, dist: _dist, bot: '');
   maxScrolling();
+
+    // print( "is: ${_message.split('\n')[1]}, ${_message.split('\n')[2]}");
+
   return _chatMessagesStreamController.add(
     chatMessageModelRecord,
   );

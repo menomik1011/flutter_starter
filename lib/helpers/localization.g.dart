@@ -112,6 +112,9 @@ class Localization extends Translations {
       'validator.amount': '특수기호 없이 숫자만 입력해주세요.',
       'speech.error': '음성인식 기능에 오류가 발생하였습니다.',
       'speech.comment': '마이크 버튼을 눌러 말씀하세요.'
+
+    //  10점 이상 19점 이하
+
     },
         };
       }

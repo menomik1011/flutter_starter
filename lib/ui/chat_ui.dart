@@ -11,6 +11,7 @@ import 'package:flutter_starter/ui/summary_ui.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'components/components.dart';
+import '../controllers/preference.dart';
 
 // ChatMessageModel _chatMessagesModel = ChatMessageModel(id: 0, message: '', bot: '', dist: '');
 class ChatScreen extends StatefulWidget {
@@ -22,7 +23,6 @@ class _ChatScreenState extends State<ChatScreen>
     with SingleTickerProviderStateMixin {
   String text = '음성이나 텍스트를 입력해주세요';
   String message = '안녕하세요? \n대화형 문진에 오신걸 환영합니다.';
-  String distType = '';
   bool draggable = true;
   bool isListening = false;
   bool isText = false;
@@ -43,9 +43,8 @@ class _ChatScreenState extends State<ChatScreen>
 
   @override
   void dispose() {
-    super.dispose();
-    this.isListening = false;
     animationController?.dispose();
+    super.dispose();
     // Do some action when screen is closed
   }
 
@@ -71,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen>
                   ),
                   title: Align(
                     alignment: Alignment.center,
-                    child: Text('MetaDoc',
+                    child: Text('Metanion',
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 20, color: Colors.black)),
@@ -81,6 +80,7 @@ class _ChatScreenState extends State<ChatScreen>
             ),
           ),
         ),
+        SizedBox(height: 20),
         ListTile(
           onTap: () {
             pc.popWithResult(result: 'Sandwich');
@@ -145,14 +145,14 @@ class _ChatScreenState extends State<ChatScreen>
       ),
       body: SafeArea(
         child: NotificationListener<SlidingPanelResult>(
-          onNotification: (food) {
-            setState(() {
-              print('You sent ${food.result}');
-              selected = "You ordered ${food.result}.\n\nNow you can go back.";
-              behavior = BackPressBehavior.POP;
-            });
-            return false;
-          },
+          // onNotification: (food) {
+          //   setState(() {
+          //     print('You sent ${food.result}');
+          //     selected = "You ordered ${food.result}.\n\nNow you can go back.";
+          //     behavior = BackPressBehavior.POP;
+          //   });
+          //   return false;
+          // },
           child: SlidingPanel(
             panelController: pc,
             isDraggable: draggable,
@@ -187,7 +187,7 @@ class _ChatScreenState extends State<ChatScreen>
                             setState(() => this.draggable = true);
                             pc.close();
                             _messageTextController.clear();
-                            bubbleGenerate(value.trim(), 1, '-');
+                            bubbleGenerate(value, 1, '-');
                             toggleKeyboard();
                           },
                         ),
@@ -242,10 +242,8 @@ class _ChatScreenState extends State<ChatScreen>
                     MessagesStream(),
                     isText
                         ? Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .center, //Center Row contents horizontally,
-                            crossAxisAlignment: CrossAxisAlignment
-                                .center, //Center Row contents vertically,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
                             children: <Widget>[
                                 IconButton(
                                   icon: Icon(Icons.close),
@@ -324,7 +322,7 @@ class _ChatScreenState extends State<ChatScreen>
     // if submittied with empty textField, block connection
     if (text != ''.trim()) {
       await dioConnection(bdi_call, email, text).then((value) => setState(
-          () => [message = value[0], distType = value[1], flow = value[2]]));
+          () => chat_list = [message = value[0], distType = value[1]]));
       // maxScrolling();
     } else {
       setState(() => {isText = false});
@@ -338,7 +336,7 @@ class _ChatScreenState extends State<ChatScreen>
           setState(() => this.isListening = isListening);
 
           if (text == '') {
-            setState(() async => {message = "지금 듣고 있습니다.", isListening = true});
+            // setState(() async => {message = "지금 듣고 있습니다.", isListening = true});
           } else if (!isListening) {
             Future.delayed(Duration(seconds: 2), () async {
               bubbleGenerate(text, 1, '');
@@ -360,22 +358,37 @@ Future<List> dioConnection(String _end, String _email, String _userMsg) async {
     'input_text': _userMsg,
     'present_bdi': '',
   });
-
   Dio dio = new Dio();
-  Response response = await dio.post("$url$_end$_email", data: formData);
-  String chat = response.data["분석결과"]["시스템응답"];
+  print("state_list : ${distType}");
+
+  Response response =
+      await dio.post("$url$_end$_email&$state$distType", data: formData);
+
+  String chat = response.data["출력"];
   String bdi = response.data["생성된 질문"]["질문"];
   String dist = response.data["생성된 질문"]["BDI"];
+  var next = response.data["분석결과"]["다음 동작"];
   String q_dist = response.data["사용자 입력 BDI 분류"]["분류 결과"];
-  String next_step = response.data["분석결과"]["다음 동작"];
+  state_list.add(next);
+  print(state_list);
+
+  if (chat.contains('\n')) chat_list = chat.split('\n');
+
   int yn = response.data["입력문장긍부정도"]["긍부정구분"]["분류 결과"];
-  if (_userMsg != ''.trim()) {
+  if (response.statusCode == 200) {
     if (q_dist == "일반") {
-      bubbleGenerate(chat, 2, dist);
-      return [chat, dist, yn];
+      if (chat.contains('\n'))
+        for (var i = 0; i < chat_list.length; i++) {
+          print(i);
+          bubbleGenerate(chat_list[i], 2, dist);
+        }
+      else
+        bubbleGenerate(chat, 2, dist);
+      return [chat, next, yn];
+      // print(chat_list);
     } else {
       bubbleGenerate(bdi, 2, dist);
-      return [bdi, dist, yn];
+      return [bdi, next, yn];
     }
   }
   return null;

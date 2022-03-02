@@ -84,7 +84,11 @@ class SignInUIState extends State<SignInUI> {
                     onPressed: _loginButtonPressed,
                     style: ElevatedButton.styleFrom(primary: Colors.yellow),
                     child:
+<<<<<<< HEAD
                     Text("카카오톡 로그인", style: TextStyle(color: Colors.black)),
+=======
+                        Text("카카오톡 로그인", style: TextStyle(color: Colors.black)),
+>>>>>>> 72619dddeb588a6926e5afd2a557c4ce8c6f0458
                   ),
                   FormVerticalSpace(),
                   LabelButton(

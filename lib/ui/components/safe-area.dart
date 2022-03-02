@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_utils/src/extensions/internacionalization.dart';
 import 'package:sliding_panel/sliding_panel.dart';
 
 class SafeAreaExample extends StatefulWidget {
@@ -29,34 +30,36 @@ class _SafeAreaExampleState extends State<SafeAreaExample>
   }
 
   List<Widget> get _content => [
+        SizedBox(height:20),
         ListTile(
-          leading: Icon(Icons.keyboard_arrow_up),
+          // leading: Icon(Icons.keyboard_arrow_up),
           selected: true,
           title: Text(
-            'Notice above additional padding in the header. If you disable safeAreaConfig, this will come handy. You can also disable it by setting primary: false in header',
+            'solution.over10.guilt'.tr,
             style: textStyleTitle,
           ),
-          trailing: Icon(Icons.keyboard_arrow_up),
+          // trailing: Icon(Icons.keyboard_arrow_up),
         ),
-        ListTile(
-          onTap: () {
-            setState(() {
-              safe = !safe;
-            });
-          },
-          selected: true,
-          leading: Icon(Icons.touch_app),
-          title: Text(
-            'SafeAreaConfig : $safe',
-            style: textStyleTitle,
-          ),
-        ),
-        ...List.generate(
-          15,
-          (index) => ListTile(
-            title: Text('Item ${index + 1}'),
-          ),
-        ),
+    SizedBox(height:30)
+        // ListTile(
+        //   onTap: () {
+        //     setState(() {
+        //       safe = !safe;
+        //     });
+        //   },
+        //   selected: true,
+        //   leading: Icon(Icons.touch_app),
+        //   title: Text(
+        //     'SafeAreaConfig : $safe',
+        //     style: textStyleTitle,
+        //   ),
+        // ),
+        // ...List.generate(
+        //   15,
+        //   (index) => ListTile(
+        //     title: Text('Item ${index + 1}'),
+        //   ),
+        // ),
       ];
 
   static final textStyleSubHead =
@@ -93,7 +96,7 @@ class _SafeAreaExampleState extends State<SafeAreaExample>
                 width: double.infinity,
                 child: Center(
                   child: Text(
-                    'Header',
+                    'title.guilt'.tr,
                     style: textStyleHeadline,
                   ),
                 ),
@@ -124,9 +127,9 @@ class _SafeAreaExampleState extends State<SafeAreaExample>
               footerContent: ButtonBar(
                 children: <Widget>[
                   FlatButton(
-                    onPressed: null,
+                    onPressed: pc.close,
                     child: Text(
-                      'Footer',
+                      'close'.tr,
                       style: textStyleSubHead,
                     ),
                   ),
@@ -162,31 +165,11 @@ class _SafeAreaExampleState extends State<SafeAreaExample>
                           padding: const EdgeInsets.only(
                               top: 48, bottom: 8.0, left: 8.0, right: 8.0),
                           child: Text(
-                            'This example uses `safeAreaConfig` in the panel.',
+                            '테스트 스크린',
                             style: textStyleSubHead,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'So, intrusions like notch, nav-bar, status bar, etc. will be ignored by the panel and padded.',
-                            style: textStyleSubHead,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            '`bodyContent` and `backdropConfig` are not padded. They still get full screen height-width. Only header, content and footer are padded.',
-                            style: textStyleSubHead,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Also notice the use of `primary: true` in `PanelHeaderOptions` here.',
-                            style: textStyleSubHead,
-                          ),
-                        ),
+
                         Container(
                           margin: EdgeInsets.only(top: 16),
                           padding: const EdgeInsets.all(6.0),

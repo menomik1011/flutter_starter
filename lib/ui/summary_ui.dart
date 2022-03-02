@@ -10,6 +10,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter_starter/controllers/controllers.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:blinking_text/blinking_text.dart';
+import 'package:sliding_panel/sliding_panel.dart';
 
 final List<String> imagesList = [
   'https://i.insider.com/5eea8a48f0f419386721f9e8?width=1136&format=jpeg',
@@ -31,13 +32,17 @@ class ResultSummary extends StatefulWidget {
   _SegmentsPageState createState() => _SegmentsPageState();
 }
 
-class _SegmentsPageState extends State<ResultSummary> {
+class _SegmentsPageState extends State<ResultSummary> with SingleTickerProviderStateMixin{
   double cardClickElevation = 0;
   int _currentIndex = 0;
   int touchedGroupIndex = -1;
   final Color leftBarColor = Colors.blue[200];
   final double width = 11;
   var request = "${url}api/result/";
+
+  bool safe = true;
+  PanelController pc;
+  AnimationController animationController;
 
   bool _showCharts = false;
   double _pointerValue = 0;
@@ -64,7 +69,10 @@ class _SegmentsPageState extends State<ResultSummary> {
   @override
   void initState() {
     super.initState();
+    pc = PanelController();
     this.fetchResult();
+    animationController = AnimationController(vsync: this);
+
     this._showCharts = false;
   }
 
@@ -80,7 +88,7 @@ class _SegmentsPageState extends State<ResultSummary> {
 
       setState(() {
         resultList = items;
-        _pointerValue = resultList["aft"].toDouble();
+        _pointerValue = resultList["bdisum"].toDouble();
         _aft = resultList["aft"].toDouble();
         _smt = resultList["smt"].toDouble();
         _cgt = resultList["cgt"].toDouble();
@@ -101,9 +109,47 @@ class _SegmentsPageState extends State<ResultSummary> {
   }
 
   void dispose() {
+    animationController?.dispose();
+
     super.dispose();
   }
 
+  List<Widget> get _content => [
+    ListTile(
+      leading: Icon(Icons.keyboard_arrow_up),
+      selected: true,
+      title: Text(
+        'Notice above additional padding in the header. If you disable safeAreaConfig, this will come handy. You can also disable it by setting primary: false in header',
+        style: textStyleTitle,
+      ),
+      trailing: Icon(Icons.keyboard_arrow_up),
+    ),
+    ListTile(
+      onTap: () {
+        setState(() {
+          safe = !safe;
+        });
+      },
+      selected: true,
+      leading: Icon(Icons.touch_app),
+      title: Text(
+        'SafeAreaConfig : $safe',
+        style: textStyleTitle,
+      ),
+    ),
+    ...List.generate(
+      15,
+          (index) => ListTile(
+        title: Text('Item ${index + 1}'),
+      ),
+    ),
+  ];
+  static final textStyleSubHead =
+  ThemeData.dark().textTheme.subtitle1.copyWith(fontSize: 20);
+  static final textStyleTitle =
+  ThemeData.dark().textTheme.headline6.copyWith(fontSize: 22);
+  static final textStyleHeadline =
+  ThemeData.dark().textTheme.headline5.copyWith(fontSize: 24);
   List<BarChartGroupData> showingGroups() => List.generate(_chart.length, (i) {
         switch (i) {
           // case 0:
@@ -565,11 +611,14 @@ class _SegmentsPageState extends State<ResultSummary> {
                           SizedBox(
                               height: 60,
                               width: size / 2,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(_rank['cognitive'][0],
-                                    style: TextStyle(
-                                        fontSize: 25, color: Colors.black)),
+                              child: TextButton(
+                                onPressed:() {},
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(_rank['cognitive'][0],
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.black)),
+                                ),
                               )),
                           SizedBox(
                               height: 60,
@@ -589,11 +638,14 @@ class _SegmentsPageState extends State<ResultSummary> {
                           SizedBox(
                               height: 60,
                               width: size / 2,
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(_rank['cognitive'][1],
-                                    style: TextStyle(
-                                        fontSize: 25, color: Colors.black)),
+                              child: TextButton(
+                                onPressed: () {},
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(_rank['cognitive'][1],
+                                      style: TextStyle(
+                                          fontSize: 25, color: Colors.black)),
+                                ),
                               )),
                           SizedBox(
                               height: 60,
@@ -898,64 +950,65 @@ class _SegmentsPageState extends State<ResultSummary> {
               ),
             ),
             SizedBox(height: 20),
-            CarouselSlider(
-              options: CarouselOptions(
-                autoPlay: true,
-                enlargeCenterPage: true,
-                //scrollDirection: Axis.vertical,
-                onPageChanged: (index, reason) {
-                  setState(
-                    () {
-                      _currentIndex = index;
-                    },
-                  );
-                },
-              ),
-              items: imagesList
-                  .map(
-                    (item) => Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        margin: EdgeInsets.only(
-                          top: 10.0,
-                          bottom: 10.0,
-                        ),
-                        elevation: 6.0,
-                        shadowColor: Colors.blueAccent,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30.0),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(30.0),
-                          ),
-                          child: Stack(
-                            children: <Widget>[
-                              Image.network(
-                                item,
-                                fit: BoxFit.cover,
-                                width: double.infinity,
-                              ),
-                              Center(
-                                child: Text(
-                                  '${titles[_currentIndex]}',
-                                  style: TextStyle(
-                                    fontSize: 24.0,
-                                    fontWeight: FontWeight.bold,
-                                    backgroundColor: Colors.black45,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  )
-                  .toList(),
-            ),
-            SizedBox(height: 20),
+
+            // CarouselSlider(
+            //   options: CarouselOptions(
+            //     autoPlay: true,
+            //     enlargeCenterPage: true,
+            //     //scrollDirection: Axis.vertical,
+            //     onPageChanged: (index, reason) {
+            //       setState(
+            //         () {
+            //           _currentIndex = index;
+            //         },
+            //       );
+            //     },
+            //   ),
+            //   items: imagesList
+            //       .map(
+            //         (item) => Padding(
+            //           padding: const EdgeInsets.all(8.0),
+            //           child: Card(
+            //             margin: EdgeInsets.only(
+            //               top: 10.0,
+            //               bottom: 10.0,
+            //             ),
+            //             elevation: 6.0,
+            //             shadowColor: Colors.blueAccent,
+            //             shape: RoundedRectangleBorder(
+            //               borderRadius: BorderRadius.circular(30.0),
+            //             ),
+            //             child: ClipRRect(
+            //               borderRadius: BorderRadius.all(
+            //                 Radius.circular(30.0),
+            //               ),
+            //               child: Stack(
+            //                 children: <Widget>[
+            //                   Image.network(
+            //                     item,
+            //                     fit: BoxFit.cover,
+            //                     width: double.infinity,
+            //                   ),
+            //                   Center(
+            //                     child: Text(
+            //                       '${titles[_currentIndex]}',
+            //                       style: TextStyle(
+            //                         fontSize: 24.0,
+            //                         fontWeight: FontWeight.bold,
+            //                         backgroundColor: Colors.black45,
+            //                         color: Colors.white,
+            //                       ),
+            //                     ),
+            //                   ),
+            //                 ],
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       )
+            //       .toList(),
+            // ),
+            // SizedBox(height: 20),
           ],
         ),
       ),

@@ -12,6 +12,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'components/components.dart';
 import '../controllers/preference.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 // ChatMessageModel _chatMessagesModel = ChatMessageModel(id: 0, message: '', bot: '', dist: '');
 class ChatScreen extends StatefulWidget {
@@ -70,7 +71,7 @@ class _ChatScreenState extends State<ChatScreen>
                   ),
                   title: Align(
                     alignment: Alignment.center,
-                    child: Text('Metanion',
+                    child: Text('대화 진행중',
                         softWrap: true,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(fontSize: 20, color: Colors.black)),
@@ -86,7 +87,7 @@ class _ChatScreenState extends State<ChatScreen>
             pc.popWithResult(result: 'Sandwich');
           },
           title: Text(
-            'Sandwich',
+            '분노 절제 명상',
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
@@ -97,16 +98,17 @@ class _ChatScreenState extends State<ChatScreen>
             // THIS WILL NOT CLOSE THE PANEL, JUST SEND THE RESULT
           },
           title: Text(
-            'Pasta',
+            '죄책감 떨치기',
             style: Theme.of(context).textTheme.headline6,
           ),
         ),
         ListTile(
           onTap: () {
-            pc.popWithResult(result: 'Malai Kofta');
+            // pc.popWithResult(result: 'Malai Kofta');
+            // await _launchUrl('https://google.com');
           },
           title: Text(
-            'Malai Kofta',
+            '긴장감 불안감 해소',
             style: Theme.of(context).textTheme.headline6,
           ),
         )
@@ -367,7 +369,7 @@ Future<List> dioConnection(String _end, String _email, String _userMsg) async {
   String chat = response.data["출력"];
   String bdi = response.data["생성된 질문"]["질문"];
   String dist = response.data["생성된 질문"]["BDI"];
-  var next = response.data["분석결과"]["다음 동작"];
+  String next = response.data["분석결과"]["다음 동작"];
   String q_dist = response.data["사용자 입력 BDI 분류"]["분류 결과"];
   state_list.add(next);
   print(state_list);

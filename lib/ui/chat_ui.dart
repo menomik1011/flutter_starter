@@ -4,7 +4,6 @@ import 'package:dio/dio.dart';
 import 'package:avatar_glow/avatar_glow.dart';
 import 'package:flutter_starter/controllers/controllers.dart';
 import 'package:flutter_starter/helpers/helpers.dart';
-import 'package:flutter_switch/flutter_switch.dart';
 import 'package:flutter_starter/models/models.dart';
 import 'package:sliding_panel/sliding_panel.dart';
 import 'package:flutter_starter/ui/summary_ui.dart';
@@ -13,6 +12,8 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'components/components.dart';
 import '../controllers/preference.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'components/safe-area.dart';
 
 // ChatMessageModel _chatMessagesModel = ChatMessageModel(id: 0, message: '', bot: '', dist: '');
 class ChatScreen extends StatefulWidget {
@@ -84,7 +85,8 @@ class _ChatScreenState extends State<ChatScreen>
         SizedBox(height: 20),
         ListTile(
           onTap: () {
-            pc.popWithResult(result: 'Sandwich');
+            // pc.popWithResult(result: 'Sandwich');
+            Get.to(() => SafeAreaExample());
           },
           title: Text(
             '분노 절제 명상',
@@ -220,7 +222,8 @@ class _ChatScreenState extends State<ChatScreen>
                   elevation: 16,
                   leading: !isText
                       ? IconButton(
-                          onPressed: () {
+                          onPressed: ()
+                          {
                             if (pc.currentState == PanelState.expanded)
                               pc
                                   .close()
@@ -361,7 +364,7 @@ Future<List> dioConnection(String _end, String _email, String _userMsg) async {
     'present_bdi': '',
   });
   Dio dio = new Dio();
-  print("state_list : ${distType}");
+  print("state_list : $distType");
 
   Response response =
       await dio.post("$url$_end$_email&$state$distType", data: formData);
@@ -370,7 +373,7 @@ Future<List> dioConnection(String _end, String _email, String _userMsg) async {
   String bdi = response.data["생성된 질문"]["질문"];
   String dist = response.data["생성된 질문"]["BDI"];
   String next = response.data["분석결과"]["다음 동작"];
-  String q_dist = response.data["사용자 입력 BDI 분류"]["분류 결과"];
+  String qDist = response.data["사용자 입력 BDI 분류"]["분류 결과"];
   state_list.add(next);
   print(state_list);
 
@@ -378,7 +381,7 @@ Future<List> dioConnection(String _end, String _email, String _userMsg) async {
 
   int yn = response.data["입력문장긍부정도"]["긍부정구분"]["분류 결과"];
   if (response.statusCode == 200) {
-    if (q_dist == "일반") {
+    if (qDist == "일반") {
       if (chat.contains('\n'))
         for (var i = 0; i < chat_list.length; i++) {
           print(i);

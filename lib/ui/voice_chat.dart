@@ -44,6 +44,5 @@ class VoiceChat extends GetView<VoiceController>{
             )
         )
     );
-    throw UnimplementedError();
   }
 }

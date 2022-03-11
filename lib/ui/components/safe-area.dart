@@ -165,7 +165,7 @@ class _SafeAreaExampleState extends State<SafeAreaExample>
                           padding: const EdgeInsets.only(
                               top: 48, bottom: 8.0, left: 8.0, right: 8.0),
                           child: Text(
-                            '테스트 스크린',
+                            '나를 위한 영상',
                             style: textStyleSubHead,
                           ),
                         ),

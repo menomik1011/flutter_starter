@@ -23,7 +23,7 @@ dependencies:
   get_storage: ^2.0.2
   avatar_glow: ^2.0.2
   crypto: ^3.0.1
-  http: ^0.13.1
+  http: ^0.13.4
   csv: ^5.0.0
   dio: ^4.0.4
   shimmer: ^2.0.0
@@ -38,6 +38,7 @@ dependencies:
   kakao_flutter_sdk: ^0.9.0
   flutter_naver_login: ^1.2.4
   url_launcher: ^6.0.20
+  youtube_player_flutter: ^8.0.0
 
 
 dependency_overrides:

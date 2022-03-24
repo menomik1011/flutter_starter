@@ -1,14 +1,14 @@
 import 'package:firebase_auth/firebase_auth.dart';
-
-const url = "http://192.168.0.37:5001/";
+const url = 'http://3.35.147.41:5000/';
+// const url = "http://192.168.0.37:5000/";
 const state = 'state=';
 // const url = "https://2720-35-234-31-70.ngrok.io/";
 // const url = 'http://192.168.35.195:5001/';
-// const url = "http://192.168.35.179:5001/";
+// const url = "http://192.168.35.20:5001/";
 // const url = "http://172.30.1.27:5001//";
 var currentUser = FirebaseAuth.instance.currentUser;
 String bdi_call = "bdiscale?email=";
-String email = currentUser.email;
+String email = "1111@gmail.com";
 String name = currentUser.displayName;
 List<String> chat_list;
 List state_list = ['start'];

@@ -108,9 +108,9 @@ class _SegmentsPageState extends State<ResultSummary> with SingleTickerProviderS
     }
   }
 
+
   void dispose() {
     animationController?.dispose();
-
     super.dispose();
   }
 
@@ -262,14 +262,14 @@ class _SegmentsPageState extends State<ResultSummary> with SingleTickerProviderS
                           ],
                         ),
                         SizedBox(height: 10),
-                        BlinkText(resultList["notice"],
+                        BlinkText(resultList["notice"] ?? '',
                             beginColor: _pointerValue > 10 && _pointerValue < 18
                                 ? Colors.greenAccent
-                                : _pointerValue > 18 && _pointerValue < 28
+                                : _pointerValue >= 18 && _pointerValue < 28
                                     ? Colors.orangeAccent
-                                    : _pointerValue > 28 && _pointerValue < 38
+                                    : _pointerValue >= 28 && _pointerValue < 38
                                         ? Colors.redAccent
-                                        : _pointerValue > 38 &&
+                                        : _pointerValue >= 38 &&
                                                 _pointerValue < 63
                                             ? Colors.red[600]
                                             : Colors.blueAccent,
@@ -292,12 +292,12 @@ class _SegmentsPageState extends State<ResultSummary> with SingleTickerProviderS
                                   activeTrackColor: _pointerValue > 10 &&
                                           _pointerValue < 18
                                       ? Colors.greenAccent
-                                      : _pointerValue > 18 && _pointerValue < 28
+                                      : _pointerValue >= 18 && _pointerValue < 28
                                           ? Colors.orangeAccent
-                                          : _pointerValue > 28 &&
+                                          : _pointerValue >= 28 &&
                                                   _pointerValue < 38
                                               ? Colors.redAccent
-                                              : _pointerValue > 38 &&
+                                              : _pointerValue >= 38 &&
                                                       _pointerValue < 63
                                                   ? Colors.red[600]
                                                   : Colors.blueAccent,
@@ -332,7 +332,7 @@ class _SegmentsPageState extends State<ResultSummary> with SingleTickerProviderS
                         ),
                         !isLoading
                             ? Column(children: [
-                                Text(resultList["solution"],
+                                Text(resultList["solution"]?? '',
                                     style: TextStyle(
                                         color: Colors.black,
                                         fontSize: 16,
@@ -859,6 +859,8 @@ class _SegmentsPageState extends State<ResultSummary> with SingleTickerProviderS
                                                       //   return _date[0] ?? "0";
                                                       // case 1:
                                                       //   return _date[1] ?? "0";
+                                                      case 5:
+                                                        return _date[5] ?? "0";
                                                       case 4:
                                                         return _date[4] ?? "0";
                                                       case 3:

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:dio/dio.dart';
@@ -12,7 +14,7 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'components/components.dart';
 import '../controllers/preference.dart';
 import 'package:url_launcher/url_launcher.dart';
-
+import 'package:http/http.dart' as http;
 import 'components/safe-area.dart';
 
 // ChatMessageModel _chatMessagesModel = ChatMessageModel(id: 0, message: '', bot: '', dist: '');
@@ -46,6 +48,7 @@ class _ChatScreenState extends State<ChatScreen>
   @override
   void dispose() {
     animationController?.dispose();
+    pc.panel?.dispose();
     super.dispose();
     // Do some action when screen is closed
   }
@@ -222,14 +225,13 @@ class _ChatScreenState extends State<ChatScreen>
                   elevation: 16,
                   leading: !isText
                       ? IconButton(
-                          onPressed: ()
-                          {
-                            if (pc.currentState == PanelState.expanded)
+                          onPressed: () {
+                            if (pc.currentState == PanelState.collapsed)
                               pc
                                   .close()
                                   .then((currentState) => {maxScrolling()});
                             else
-                              pc.expand();
+                              pc.collapse();
                           },
                           icon: AnimatedIcon(
                             icon: AnimatedIcons.menu_close,
@@ -325,10 +327,13 @@ class _ChatScreenState extends State<ChatScreen>
     additionalCommand(distType, flow);
     straightCommand(text, isCommand);
     // if submittied with empty textField, block connection
+
+
     if (text != ''.trim()) {
+      // await httpConnection(bdi_call, email, text);
       await dioConnection(bdi_call, email, text).then((value) => setState(
           () => chat_list = [message = value[0], distType = value[1]]));
-      // maxScrolling();
+      maxScrolling();
     } else {
       setState(() => {isText = false});
     }
@@ -358,16 +363,34 @@ class _ChatScreenState extends State<ChatScreen>
       );
 }
 
+Future<String> httpConnection(String _end, String _email, String _userMsg) async {
+  var chatUrl = Uri.parse('$url$_end$_email&$state$distType');
+  var response = await http.post(chatUrl, body: {'input_text': _userMsg, 'present_bdi': ''}).timeout((Duration(seconds:5)));
+
+  print('Response status: ${response.statusCode}');
+  print('Response body: 11111111111111${utf8.decode(response.bodyBytes)}');
+
+  // String chat = response.body[0];
+
+  return utf8.decode(response.bodyBytes);
+}
+
+
 Future<List> dioConnection(String _end, String _email, String _userMsg) async {
   var formData = FormData.fromMap({
     'input_text': _userMsg,
     'present_bdi': '',
   });
-  Dio dio = new Dio();
+
+  var options = BaseOptions(
+    baseUrl: '$url',
+    connectTimeout: 7000,
+    receiveTimeout: 5000,
+  );
+  Dio dio = new Dio(options);
   print("state_list : $distType");
 
-  Response response =
-      await dio.post("$url$_end$_email&$state$distType", data: formData);
+  Response response = await dio.post('$_end$_email&$state$distType',data:formData);
 
   String chat = response.data["출력"];
   String bdi = response.data["생성된 질문"]["질문"];
